@@ -5,7 +5,7 @@ namespace Prototypr\SystemBundle\Core;
 /**
  * Main Prototypr kernel
  */
-class Kernel
+class SystemKernel
 {
     /**
      * @var \Symfony\Component\HttpFoundation\Request
@@ -23,6 +23,11 @@ class Kernel
     private $logger;
 
     /**
+     * @var \Symfony\Bridge\Monolog\Logger
+     */
+    private $currentApplicationKernel;
+
+    /**
      * Init
      */
     public function init()
@@ -32,8 +37,8 @@ class Kernel
 
     /**
      * Set Request
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request The Request
+     * Symfony\Component\HttpFoundation
+     * @param Symfony\Component\HttpFoundation\Request $request The Request
      */
     public function setRequest($request)
     {
