@@ -27,7 +27,6 @@ class Controller extends BaseController implements ControllerInterface
         return $this->getSystemKernel()->getCurrentApplicationKernel();
     }
 
-
     /**
      * Get the system kernel
      *

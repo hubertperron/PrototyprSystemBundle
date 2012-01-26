@@ -81,9 +81,9 @@ class ControllerListener
      * Add a application kernel
      *
      * @param string $name The application name
-     * @param Kernel $kernel The application kernel
+     * @param ApplicationKernel $kernel The application kernel
      */
-    public function addApplicationKernel($name, Kernel $kernel)
+    public function addApplicationKernel($name, $kernel)
     {
         $this->applicationKernels[$name] = $kernel;
     }
@@ -93,7 +93,7 @@ class ControllerListener
      *
      * @param Logger $logger The Logger
      */
-    public function setLogger(Logger $logger)
+    public function setLogger($logger)
     {
         $this->logger = $logger;
     }
@@ -103,7 +103,7 @@ class ControllerListener
      *
      * @param SystemKernel $kernel The prototypr system kernel
      */
-    public function setSystemKernel(SystemKernel $kernel)
+    public function setSystemKernel($kernel)
     {
         $this->systemKernel = $kernel;
     }
@@ -113,7 +113,7 @@ class ControllerListener
      *
      * @param ApplicationKernel $kernel The prototypr system kernel
      */
-    public function setCurrentApplicationKernel(ApplicationKernel $kernel)
+    public function setCurrentApplicationKernel($kernel)
     {
         $this->currentApplicationKernel = $kernel;
     }

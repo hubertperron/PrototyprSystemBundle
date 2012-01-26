@@ -2,28 +2,36 @@
 
 namespace Prototypr\SystemBundle\Core;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\DoctrineBundle\Registry;
+use Symfony\Bridge\Monolog\Logger;
+
+use Prototypr\SystemBundle\Core\ApplicationKernel;
+
 /**
  * Main Prototypr kernel
  */
 class SystemKernel
 {
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var Request
      */
     private $request;
 
     /**
-     * @var \Symfony\Bundle\DoctrineBundle\Registry
+     * @var Registry
      */
     private $doctrine;
 
     /**
-     * @var \Symfony\Bridge\Monolog\Logger
+     * @var Logger
      */
     private $logger;
 
     /**
-     * @var \Symfony\Bridge\Monolog\Logger
+     * The currently loaded application kernel
+     *
+     * @var ApplicationKernel
      */
     private $currentApplicationKernel;
 
@@ -32,13 +40,13 @@ class SystemKernel
      */
     public function init()
     {
-        $this->logger->info(get_class($this) . '::INIT');
+        // Placeholder for future usefull stuff.
     }
 
     /**
      * Set Request
-     * Symfony\Component\HttpFoundation
-     * @param Symfony\Component\HttpFoundation\Request $request The Request
+     *
+     * @param Request $request The Request
      */
     public function setRequest($request)
     {
@@ -48,7 +56,7 @@ class SystemKernel
     /**
      * Set Doctrine
      *
-     * @param \Symfony\Bundle\DoctrineBundle\Registry $doctrine Doctrine
+     * @param Registry $doctrine Doctrine
      */
     public function setDoctrine($doctrine)
     {
@@ -79,5 +87,21 @@ class SystemKernel
         if (isset($tokens[1])) {
             return strtolower($tokens[1]);
         }
+    }
+
+    /**
+     * @param ApplicationKernel $currentApplicationKernel
+     */
+    public function setCurrentApplicationKernel($currentApplicationKernel)
+    {
+        $this->currentApplicationKernel = $currentApplicationKernel;
+    }
+
+    /**
+     * @return ApplicationKernel
+     */
+    public function getCurrentApplicationKernel()
+    {
+        return $this->currentApplicationKernel;
     }
 }
