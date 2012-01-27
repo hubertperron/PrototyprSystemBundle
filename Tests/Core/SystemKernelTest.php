@@ -7,20 +7,23 @@ use Prototypr\SystemBundle\Core\ApplicationKernel;
 
 class SystemKernelTest extends \PHPUnit_Framework_TestCase
 {
-    public function testInit()
+    public function setUp()
     {
-        $systemKernel = new SystemKernel();
-        $systemKernel->init();
+        $this->systemKernel = new SystemKernel();
+        $this->applicationKernel = new ApplicationKernel();
+        $this->logger = $this->getMock('Symfony\Bridge\Monolog\Logger', array(), array('info'));
     }
 
-    public function testSetCurrentApplicationKernel()
+    public function testInit()
     {
-        $applicationKernel = new ApplicationKernel();
+        $this->logger->expects($this->once())
+            ->method('addInfo')
+            ->will($this->returnValue(true));
 
-        $systemKernel = new SystemKernel();
-        $systemKernel->init();
-        $systemKernel->setCurrentApplicationKernel($applicationKernel);
+        $this->systemKernel->setLogger($this->logger);
+        $this->systemKernel->setApplicationKernel($this->applicationKernel);
+        $this->systemKernel->init();
 
-        $this->assertEquals($applicationKernel, $systemKernel->getCurrentApplicationKernel());
+        $this->assertEquals($this->applicationKernel, $this->systemKernel->getApplicationKernel());
     }
 }

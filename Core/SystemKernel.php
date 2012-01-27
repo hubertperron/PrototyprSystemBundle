@@ -44,7 +44,7 @@ class SystemKernel
 
         $this->applicationKernel->init();
 
-        $this->logger->addInfo('Prototypr initalized using kernel ', $this->applicationKernel);
+        $this->logger->addInfo('Prototypr initalized using kernel ' . $this->applicationKernel);
     }
 
     /**

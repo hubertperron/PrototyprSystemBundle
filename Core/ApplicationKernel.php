@@ -9,6 +9,15 @@ class ApplicationKernel
 {
     protected $name;
 
+    public function __toString()
+    {
+        if ($this->name) {
+            return $this->name;
+        }
+
+        return 'UnnamedApplicationKernel';
+    }
+
     /**
      * Init
      */
