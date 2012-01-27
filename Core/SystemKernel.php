@@ -7,6 +7,7 @@ use Symfony\Bundle\DoctrineBundle\Registry;
 use Symfony\Bridge\Monolog\Logger;
 
 use Prototypr\SystemBundle\Core\ApplicationKernel;
+use Prototypr\SystemBundle\Exception\ApplicationNotBoundException;
 
 /**
  * Main Prototypr kernel
@@ -14,59 +15,42 @@ use Prototypr\SystemBundle\Core\ApplicationKernel;
 class SystemKernel
 {
     /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var Registry
-     */
-    private $doctrine;
-
-    /**
      * @var Logger
      */
     private $logger;
+
+    /**
+     * A collection of available application kernels
+     *
+     * @var array
+     */
+    private $applicationKernels;
 
     /**
      * The currently loaded application kernel
      *
      * @var ApplicationKernel
      */
-    private $currentApplicationKernel;
+    private $applicationKernel;
 
     /**
      * Init
      */
     public function init()
     {
-        // Placeholder for future usefull stuff.
-    }
+        if (false == $this->applicationKernel instanceof ApplicationKernel) {
+            throw new ApplicationNotBoundException();
+        }
 
-    /**
-     * Set Request
-     *
-     * @param Request $request The Request
-     */
-    public function setRequest($request)
-    {
-        $this->request = $request;
-    }
+        $this->applicationKernel->init();
 
-    /**
-     * Set Doctrine
-     *
-     * @param Registry $doctrine Doctrine
-     */
-    public function setDoctrine($doctrine)
-    {
-        $this->doctrine = $doctrine;
+        $this->logger->addInfo('Prototypr initalized using kernel ', $this->applicationKernel);
     }
 
     /**
      * Set Logger
      *
-     * @param \Symfony\Bridge\Monolog\Logger $logger Monolog logger
+     * @param Logger $logger Monolog
      */
     public function setLogger($logger)
     {
@@ -74,34 +58,48 @@ class SystemKernel
     }
 
     /**
-     * Get the current application name
-     *
-     * @return string|null
+     * @param ApplicationKernel $kernel
      */
-    public function getCurrentApplicationName()
+    public function setApplicationKernel($kernel)
     {
-        // Match each camel cased token
-        $controller = str_replace('\\', '', $this->request->get('_controller'));
-        $tokens = preg_split('/(?<=\\w)(?=[A-Z])/', $controller);
-
-        if (isset($tokens[1])) {
-            return strtolower($tokens[1]);
-        }
-    }
-
-    /**
-     * @param ApplicationKernel $currentApplicationKernel
-     */
-    public function setCurrentApplicationKernel($currentApplicationKernel)
-    {
-        $this->currentApplicationKernel = $currentApplicationKernel;
+        $this->applicationKernel = $kernel;
     }
 
     /**
      * @return ApplicationKernel
      */
-    public function getCurrentApplicationKernel()
+    public function getApplicationKernel()
     {
-        return $this->currentApplicationKernel;
+        return $this->applicationKernel;
+    }
+
+    /**
+     * Set the application kernels.
+     *
+     * @param array $applicationKernels
+     */
+    public function setApplicationKernels($kernels)
+    {
+        $this->applicationKernels = $kernels;
+    }
+
+    /**
+     * Get the application kernels.
+     *
+     * @return array
+     */
+    public function getApplicationKernels()
+    {
+        return $this->applicationKernels;
+    }
+
+    /**
+     * Add a application kernel.
+     *
+     * @param ApplicationKernel $kernel
+     */
+    public function addApplicationKernel($kernel)
+    {
+        $this->applicationKernels[$kernel->getName()] = $kernel;
     }
 }

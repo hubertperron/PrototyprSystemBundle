@@ -22,27 +22,9 @@ class ControllerListener
     private $systemKernel;
 
     /**
-     * @var array
-     */
-    private $applicationKernels;
-
-    /**
-     * @var ApplicationKernel
-     */
-    private $currentApplicationKernel;
-
-    /**
      * @var Logger
      */
     private $logger;
-
-    /**
-     * __construct
-     */
-    public function __construct()
-    {
-        $this->applicationKernels = array();
-    }
 
     /**
      * @param FilterControllerEvent $event
@@ -56,23 +38,22 @@ class ControllerListener
             $controller = $controller[0];
 
             // The controller must implement the prototypr controller interface
-            // to boot the prototypr system
             if (false == $controller instanceof ControllerInterface) {
                 return;
             }
 
-            $currentApplicationName = $this->systemKernel->getCurrentApplicationName();
+            //! Hardcoded for testing purpose
+            $applicationKernel = new ApplicationKernel();
+            $applicationKernel->setName('backend');
 
-            if (false == in_array($currentApplicationName, array_keys($this->applicationKernels))) {
+            if (false == in_array($applicationKernel->getName(), array_keys($this->systemKernel->getApplicationKernels()))) {
                 throw new ApplicationNotFoundException();
             }
 
-            $currentApplicationKernel = $this->applicationKernels[$currentApplicationName];
-
             // And here we go! (espérons que ça d'jam pas dan'l coude)
-            $this->systemKernel->setCurrentApplicationKernel($currentApplicationKernel);
+            $this->systemKernel->setCurrentApplicationKernel($applicationKernel);
             $this->systemKernel->init();
-            $currentApplicationKernel->init();
+
             $controller->init();
         }
     }

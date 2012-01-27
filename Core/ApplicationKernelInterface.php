@@ -13,4 +13,6 @@ interface ApplicationKernelInterface
      * @abstract
      */
     function init();
+
+    function getName();
 }
