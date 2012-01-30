@@ -8,6 +8,7 @@ use Symfony\Bridge\Monolog\Logger;
 
 use Prototypr\SystemBundle\Core\ApplicationKernel;
 use Prototypr\SystemBundle\Exception\ApplicationNotBoundException;
+use Prototypr\SystemBundle\Exception\ApplicationNotFoundException;
 
 /**
  * Main Prototypr kernel
@@ -34,12 +35,28 @@ class SystemKernel
     private $applicationKernel;
 
     /**
+     * Construct
+     */
+    public function __construct()
+    {
+        $this->applicationKernels = array();
+
+        // Temporary hardcoded application kernels
+        $this->applicationKernels['backend'] = new ApplicationKernel();
+        $this->applicationKernels['frontend'] = new ApplicationKernel();
+    }
+
+    /**
      * Init
      */
     public function init()
     {
         if (false == $this->applicationKernel instanceof ApplicationKernel) {
             throw new ApplicationNotBoundException();
+        }
+
+        if (false == in_array($this->applicationKernel->getName(), array_keys($this->applicationKernels))) {
+            throw new ApplicationNotFoundException();
         }
 
         $this->applicationKernel->init();

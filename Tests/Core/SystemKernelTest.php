@@ -20,6 +20,8 @@ class SystemKernelTest extends \PHPUnit_Framework_TestCase
             ->method('addInfo')
             ->will($this->returnValue(true));
 
+        $this->applicationKernel->setName('backend');
+
         $this->systemKernel->setLogger($this->logger);
         $this->systemKernel->setApplicationKernel($this->applicationKernel);
         $this->systemKernel->init();

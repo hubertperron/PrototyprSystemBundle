@@ -30,4 +30,9 @@ class ApplicationKernel
     {
         return $this->name;
     }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
 }
