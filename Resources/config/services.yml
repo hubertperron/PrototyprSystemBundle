@@ -1,0 +1,20 @@
+parameters:
+
+    prototypr.system.controller_listener.class: Prototypr\SystemBundle\Listener\ControllerListener
+    prototypr.system.kernel.class: Prototypr\SystemBundle\Core\Kernel
+
+services:
+
+    prototypr.system.controller_listener:
+        class: %prototypr.system.controller_listener.class%
+        tags:
+          - { name: kernel.event_listener, event: kernel.controller }
+        arguments: [ @prototypr.system.kernel ]
+        calls:
+          - [ setLogger, [ @logger ] ]
+
+    prototypr.system.kernel:
+        class: %prototypr.system.kernel.class%
+        shared: true
+        calls:
+          - [ setLogger, [ @logger ] ]
