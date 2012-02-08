@@ -1,0 +1,33 @@
+Prototypr\SystemBundle\Entity\Page:
+  type: entity
+  table: page
+  repositoryClass: Prototypr\SystemBundle\Entity\PageRepository
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    title:
+      type: string
+    active:
+      type: boolean
+    ordering:
+      type: integer
+    createdAt:
+      column: created_at
+      type: datetime
+    updatedAt:
+      column: updated_at
+      type: datetime
+  manyToOne:
+    parent:
+      targetEntity: Prototypr\SystemBundle\Entity\Page
+      inversedBy: children
+      joinColumn:
+        name: parent_id
+        referencedColumnName: id
+        onDelete: cascade
+    application:
+      targetEntity: Prototypr\SystemBundle\Entity\Application
+      inversedBy: pages
