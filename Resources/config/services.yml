@@ -1,7 +1,7 @@
 parameters:
 
     prototypr.system.controller_listener.class: Prototypr\SystemBundle\Listener\ControllerListener
-    prototypr.system.kernel.class: Prototypr\SystemBundle\Core\Kernel
+    prototypr.system.kernel.class: Prototypr\SystemBundle\Core\SystemKernel
 
 services:
 

@@ -20,6 +20,10 @@ Prototypr\SystemBundle\Entity\Page:
     updatedAt:
       column: updated_at
       type: datetime
+  oneToMany:
+    children:
+      targetEntity: Prototypr\SystemBundle\Entity\Page
+      mappedBy: parent
   manyToOne:
     parent:
       targetEntity: Prototypr\SystemBundle\Entity\Page
@@ -29,5 +33,6 @@ Prototypr\SystemBundle\Entity\Page:
         referencedColumnName: id
         onDelete: cascade
     application:
+      fetch: EAGER
       targetEntity: Prototypr\SystemBundle\Entity\Application
       inversedBy: pages

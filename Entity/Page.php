@@ -15,6 +15,21 @@ class Page
     private $id;
 
     /**
+     * @var Prototypr\SystemBundle\Entity\Page
+     */
+    private $parent;
+
+    /**
+     * @var Doctrine\Common\Collections\ArrayCollection
+     */
+    private $children;
+
+    /**
+     * @var Prototypr\SystemBundle\Entity\Application
+     */
+    private $application;
+
+    /**
      * @var string $title
      */
     private $title;
@@ -25,9 +40,9 @@ class Page
     private $active;
 
     /**
-     * @var integer $order
+     * @var integer $ordering
      */
-    private $order;
+    private $ordering;
 
     /**
      * @var datetime $createdAt
@@ -39,6 +54,10 @@ class Page
      */
     private $updatedAt;
 
+    public function __construct()
+    {
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -91,26 +110,6 @@ class Page
     }
 
     /**
-     * Set order
-     *
-     * @param integer $order
-     */
-    public function setOrder($order)
-    {
-        $this->order = $order;
-    }
-
-    /**
-     * Get order
-     *
-     * @return integer 
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
      * Set createdAt
      *
      * @param datetime $createdAt
@@ -143,17 +142,12 @@ class Page
     /**
      * Get updatedAt
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
-    /**
-     * @var integer $ordering
-     */
-    private $ordering;
-
 
     /**
      * Set ordering
@@ -174,11 +168,6 @@ class Page
     {
         return $this->ordering;
     }
-    /**
-     * @var Prototypr\SystemBundle\Entity\Page
-     */
-    private $parent;
-
 
     /**
      * Set parent
@@ -199,11 +188,6 @@ class Page
     {
         return $this->parent;
     }
-    /**
-     * @var Prototypr\SystemBundle\Entity\Application
-     */
-    private $application;
-
 
     /**
      * Set application
@@ -223,5 +207,42 @@ class Page
     public function getApplication()
     {
         return $this->application;
+    }
+    
+    /**
+     * Add children
+     *
+     * @param Prototypr\SystemBundle\Entity\Page $children
+     */
+    public function addPage(\Prototypr\SystemBundle\Entity\Page $children)
+    {
+        $this->children[] = $children;
+    }
+
+    /**
+     * Get children
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Get the frontend route
+     *
+     * @param string $suffix
+     * @return string
+     */
+    public function getFrontendRoute($suffix = '')
+    {
+        $route = 'frontend_' . $this->id;
+
+        if ($suffix) {
+            $route .= $suffix;
+        }
+
+        return $route;
     }
 }
