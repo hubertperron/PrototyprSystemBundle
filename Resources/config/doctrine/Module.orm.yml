@@ -1,0 +1,17 @@
+Prototypr\SystemBundle\Entity\Module:
+  type: entity
+  table: module
+  repositoryClass: Prototypr\SystemBundle\Entity\ModuleRepository
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    bundle:
+      type: string
+  manyToOne:
+    application:
+      fetch: EAGER
+      targetEntity: Prototypr\SystemBundle\Entity\Application
+      inversedBy: modules
