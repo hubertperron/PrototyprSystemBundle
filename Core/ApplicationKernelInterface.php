@@ -7,12 +7,9 @@ namespace Prototypr\SystemBundle\Core;
  */
 interface ApplicationKernelInterface
 {
-    /**
-     * Initialize the controller.
-     *
-     * @abstract
-     */
     function init();
 
     function getName();
+
+    function setName($name);
 }

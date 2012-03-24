@@ -3,12 +3,16 @@
 namespace Prototypr\SystemBundle\Core;
 
 /**
- * Default prototypr application kernel implementation
+ * Base implementation of an application kernel
  */
-class ApplicationKernel
+abstract class ApplicationKernel implements ApplicationKernelInterface
 {
+
     protected $name;
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         if ($this->name) {
@@ -26,11 +30,17 @@ class ApplicationKernel
         // ... add your implementation in the subclasses
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @param $name
+     */
     public function setName($name)
     {
         $this->name = $name;
