@@ -36,3 +36,7 @@ Prototypr\SystemBundle\Entity\Page:
       fetch: EAGER
       targetEntity: Prototypr\SystemBundle\Entity\Application
       inversedBy: pages
+      joinColumn:
+        name: application_id
+        referencedColumnName: id
+        onDelete: cascade

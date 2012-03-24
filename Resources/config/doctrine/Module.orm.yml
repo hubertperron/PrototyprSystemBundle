@@ -15,3 +15,7 @@ Prototypr\SystemBundle\Entity\Module:
       fetch: EAGER
       targetEntity: Prototypr\SystemBundle\Entity\Application
       inversedBy: modules
+      joinColumn:
+        name: application_id
+        referencedColumnName: id
+        onDelete: cascade
