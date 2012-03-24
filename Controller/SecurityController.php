@@ -23,7 +23,7 @@ class SecurityController extends Controller
      */
     public function loginAction($application, Request $request)
     {
-        $session = $this->get('session');
+        $session = $request->getSession();
 
         $targetPath = $session->get('_security.target_path');
 

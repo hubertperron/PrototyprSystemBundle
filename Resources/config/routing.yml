@@ -1,0 +1,9 @@
+prototypr_system_login:
+    pattern:   /user/login/{application}
+    defaults:  { _controller: PrototyprSystemBundle:Security:login, application: ~ }
+
+prototypr_system_login_check:
+    pattern:   /user/login_check
+
+prototypr_system_logout:
+    pattern:   /user/logout
