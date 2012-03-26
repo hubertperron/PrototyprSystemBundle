@@ -10,16 +10,32 @@ Prototypr\SystemBundle\Entity\Page:
         strategy: AUTO
     title:
       type: string
+      gedmo:
+        - sluggable
     active:
       type: boolean
     ordering:
       type: integer
+    slug:
+      type: string
+      length: 255
+      nullable: true
+      gedmo:
+        slug:
+          fields: [title]
+          separator: -
     createdAt:
       column: created_at
       type: datetime
+      gedmo:
+        timestampable:
+          on: create
     updatedAt:
       column: updated_at
       type: datetime
+      gedmo:
+        timestampable:
+          on: update
   oneToMany:
     children:
       targetEntity: Prototypr\SystemBundle\Entity\Page
