@@ -42,8 +42,8 @@ class SystemKernel
         $this->applicationKernels = array();
 
         // Temporary hardcoded application kernels
-        $this->applicationKernels['backend'] = new ApplicationKernel();
-        $this->applicationKernels['frontend'] = new ApplicationKernel();
+//        $this->applicationKernels['backend'] = new ApplicationKernel();
+//        $this->applicationKernels['frontend'] = new ApplicationKernel();
     }
 
     /**
