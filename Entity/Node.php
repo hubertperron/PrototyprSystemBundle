@@ -11,6 +11,7 @@ use Prototypr\SystemBundle\Entity\Base;
  */
 abstract class Node extends Base
 {
+
     /**
      * @var string $headers
      */
@@ -21,25 +22,6 @@ abstract class Node extends Base
      */
     protected $title;
 
-    /**
-     * @var datetime $createdAt
-     */
-    protected $createdAt;
-
-    /**
-     * @var datetime $updatedAt
-     */
-    protected $updatedAt;
-
-    /**
-     * @var integer $ordering
-     */
-    protected $ordering;
-
-    /**
-     * @var boolean $active
-     */
-    protected $active;
 
     /**
      * Set headers
@@ -54,7 +36,7 @@ abstract class Node extends Base
     /**
      * Get headers
      *
-     * @return string
+     * @return string 
      */
     public function getHeaders()
     {
@@ -74,90 +56,10 @@ abstract class Node extends Base
     /**
      * Get title
      *
-     * @return string
+     * @return string 
      */
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param datetime $createdAt
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return datetime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param datetime $updatedAt
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return datetime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Set ordering
-     *
-     * @param integer $ordering
-     */
-    public function setOrdering($ordering)
-    {
-        $this->ordering = $ordering;
-    }
-
-    /**
-     * Get ordering
-     *
-     * @return integer
-     */
-    public function getOrdering()
-    {
-        return $this->ordering;
-    }
-
-    /**
-     * Set active
-     *
-     * @param boolean $active
-     */
-    public function setActive($active)
-    {
-        $this->active = $active;
-    }
-
-    /**
-     * Get active
-     *
-     * @return boolean
-     */
-    public function getActive()
-    {
-        return $this->active;
     }
 }
