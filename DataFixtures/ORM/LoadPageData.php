@@ -38,7 +38,7 @@ class LoadPageData extends AbstractFixture implements OrderedFixtureInterface, C
 
             $page = new Page();
             $page->setApplication($application);
-            $page->setTitle($application->getName() . ' login');
+            $page->setName($application->getName() . ' login');
             $page->setActive(true);
             $page->setOrdering($key + 1);
 

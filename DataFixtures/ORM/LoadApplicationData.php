@@ -17,12 +17,14 @@ class LoadApplicationData extends AbstractFixture implements OrderedFixtureInter
     {
         $application = new Application();
         $application->setName('backend');
+        $application->setOrdering(1);
         $application->setActive(true);
 
         $manager->persist($application);
 
         $application = new Application();
         $application->setName('frontend');
+        $application->setOrdering(2);
         $application->setActive(true);
 
         $manager->persist($application);

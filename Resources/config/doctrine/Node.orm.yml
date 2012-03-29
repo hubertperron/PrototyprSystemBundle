@@ -6,3 +6,4 @@ Prototypr\SystemBundle\Entity\Node:
       nullable: true
     title:
       type: string
+      nullable: true

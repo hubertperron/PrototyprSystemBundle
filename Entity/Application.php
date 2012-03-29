@@ -4,37 +4,31 @@ namespace Prototypr\SystemBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Prototypr\SystemBundle\Entity\Base;
+
 /**
  * Prototypr\SystemBundle\Entity\Application
  */
-class Application
+class Application extends Base
 {
-    /**
-     * @var integer $id
-     */
-    private $id;
-
     /**
      * @var string $name
      */
-    private $name;
+    protected $name;
 
     /**
-     * @var boolean $active
+     * @var Prototypr\SystemBundle\Entity\Page
      */
-    private $active;
-
+    protected $pages;
 
     /**
-     * Get id
-     *
-     * @return integer 
+     * Construct
      */
-    public function getId()
+    public function __construct()
     {
-        return $this->id;
+        $this->pages = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
+    
     /**
      * Set name
      *
@@ -55,35 +49,6 @@ class Application
         return $this->name;
     }
 
-    /**
-     * Set active
-     *
-     * @param boolean $active
-     */
-    public function setActive($active)
-    {
-        $this->active = $active;
-    }
-
-    /**
-     * Get active
-     *
-     * @return boolean 
-     */
-    public function getActive()
-    {
-        return $this->active;
-    }
-    /**
-     * @var Prototypr\SystemBundle\Entity\Page
-     */
-    private $pages;
-
-    public function __construct()
-    {
-        $this->pages = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
     /**
      * Add pages
      *

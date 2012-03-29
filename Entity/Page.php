@@ -14,17 +14,23 @@ class Page extends Node
     /**
      * @var Prototypr\SystemBundle\Entity\Page
      */
-    private $children;
+    protected $children;
 
     /**
      * @var Prototypr\SystemBundle\Entity\Page
      */
-    private $parent;
+    protected $parent;
 
     /**
      * @var Prototypr\SystemBundle\Entity\Application
      */
-    private $application;
+    protected $application;
+
+    /**
+     * @var string $name
+     */
+    protected $name;
+
 
     public function __construct()
     {
@@ -89,5 +95,25 @@ class Page extends Node
     public function getApplication()
     {
         return $this->application;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

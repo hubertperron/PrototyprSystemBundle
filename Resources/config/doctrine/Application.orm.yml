@@ -3,15 +3,8 @@ Prototypr\SystemBundle\Entity\Application:
   table: application
   repositoryClass: Prototypr\SystemBundle\Entity\ApplicationRepository
   fields:
-    id:
-      type: integer
-      id: true
-      generator:
-        strategy: AUTO
     name:
       type: string
-    active:
-      type: boolean
   oneToMany:
     pages:
       targetEntity: Prototypr\SystemBundle\Entity\Page

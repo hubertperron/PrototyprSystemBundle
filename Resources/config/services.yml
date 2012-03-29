@@ -1,9 +1,16 @@
 parameters:
 
-    prototypr.system.controller_listener.class: Prototypr\SystemBundle\Listener\ControllerListener
     prototypr.system.kernel.class: Prototypr\SystemBundle\Core\SystemKernel
+    prototypr.system.controller_listener.class: Prototypr\SystemBundle\Listener\ControllerListener
+    prototypr.system.pre_persist_listener.class: Prototypr\SystemBundle\Listener\PrePersistListener
 
 services:
+
+    prototypr.system.kernel:
+        class: %prototypr.system.kernel.class%
+        shared: true
+        calls:
+          - [ setLogger, [ @logger ] ]
 
     prototypr.system.controller_listener:
         class: %prototypr.system.controller_listener.class%
@@ -13,8 +20,7 @@ services:
         calls:
           - [ setLogger, [ @logger ] ]
 
-    prototypr.system.kernel:
-        class: %prototypr.system.kernel.class%
-        shared: true
-        calls:
-          - [ setLogger, [ @logger ] ]
+    prototypr.system.pre_persist_listener:
+        class: %prototypr.system.pre_persist_listener.class%
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
