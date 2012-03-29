@@ -1,0 +1,8 @@
+Prototypr\SystemBundle\Entity\Node:
+  type: mappedSuperclass
+  fields:
+    headers:
+      type: string
+      nullable: true
+    title:
+      type: string

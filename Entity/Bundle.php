@@ -4,20 +4,18 @@ namespace Prototypr\SystemBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Prototypr\SystemBundle\Entity\Base;
+
 /**
- * Prototypr\SystemBundle\Entity\Module
+ * Prototypr\SystemBundle\Entity\Bundle
  */
-class Module
+class Bundle extends Base
 {
-    /**
-     * @var integer $id
-     */
-    private $id;
 
     /**
-     * @var string $bundle
+     * @var string $class
      */
-    private $bundle;
+    private $class;
 
     /**
      * @var Prototypr\SystemBundle\Entity\Application
@@ -26,33 +24,23 @@ class Module
 
 
     /**
-     * Get id
+     * Set class
      *
-     * @return integer 
+     * @param string $class
      */
-    public function getId()
+    public function setClass($class)
     {
-        return $this->id;
+        $this->class = $class;
     }
 
     /**
-     * Set bundle
-     *
-     * @param string $bundle
-     */
-    public function setBundle($bundle)
-    {
-        $this->bundle = $bundle;
-    }
-
-    /**
-     * Get bundle
+     * Get class
      *
      * @return string 
      */
-    public function getBundle()
+    public function getClass()
     {
-        return $this->bundle;
+        return $this->class;
     }
 
     /**

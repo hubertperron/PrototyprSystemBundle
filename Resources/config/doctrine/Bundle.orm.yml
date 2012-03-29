@@ -1,20 +1,15 @@
-Prototypr\SystemBundle\Entity\Module:
+Prototypr\SystemBundle\Entity\Bundle:
   type: entity
-  table: module
-  repositoryClass: Prototypr\SystemBundle\Entity\ModuleRepository
+  table: bundle
+  repositoryClass: Prototypr\SystemBundle\Entity\BundleRepository
   fields:
-    id:
-      type: integer
-      id: true
-      generator:
-        strategy: AUTO
-    bundle:
+    class:
       type: string
   manyToOne:
     application:
       fetch: EAGER
       targetEntity: Prototypr\SystemBundle\Entity\Application
-      inversedBy: modules
+      inversedBy: bundles
       joinColumn:
         name: application_id
         referencedColumnName: id
