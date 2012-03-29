@@ -12,27 +12,27 @@ abstract class Base
     /**
      * @var integer $id
      */
-    private $id;
+    protected $id;
 
     /**
      * @var datetime $createdAt
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var datetime $updatedAt
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
      * @var integer $ordering
      */
-    private $ordering;
+    protected $ordering;
 
     /**
      * @var boolean $active
      */
-    private $active;
+    protected $active;
 
 
     /**
