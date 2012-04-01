@@ -46,6 +46,16 @@ abstract class Base
     }
 
     /**
+     * Set id
+     *
+     * @param $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
      * Set createdAt
      *
      * @param datetime $createdAt

@@ -73,6 +73,54 @@ class Page extends Node
     }
 
     /**
+     * Get parents
+     *
+     * @return array
+     */
+    public function getParents()
+    {
+        $level = 1;
+
+        $parentsDesc = array();
+        $parentsAsc = array();
+        $parent = $this->getParent();
+
+        while ($parent && $parent->getId()) {
+            $parentsDesc[] = $parent;
+            $parent = $parent->getParent();
+        }
+
+        foreach (array_reverse($parentsDesc) as $parent) {
+            $parentsAsc[$level++] = $parent;
+        }
+
+        return $parentsAsc;
+    }
+
+    /**
+     * Get an array of each slug in the parent hierarchy indexed by lvel number
+     *
+     * @param bool $includeCurrent
+     * @return array
+     */
+    public function getParentSlugs($includeCurrent = false)
+    {
+        $level = 0;
+        $parents = $this->getParents();
+        $slugs = array();
+
+        foreach ($parents as $level => $parent) {
+            $slugs[$level] = $parent->getSlug();
+        }
+
+        if ($includeCurrent) {
+            $slugs[++$level] = $this->slug;
+        }
+
+        return $slugs;
+    }
+
+    /**
      * Set application
      *
      * @param Prototypr\SystemBundle\Entity\Application $application

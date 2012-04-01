@@ -42,7 +42,7 @@ class ApplicationLoader
         $pages = $this->findPages();
 
         foreach ($pages as $page) {
-            $collection->add('prototypr_' . $this->applicationName . '_' . $page->getId(), new Route($page->getSlug()));
+            $collection->add('prototypr_' . $this->applicationName . '_id_' . $page->getId(), new Route($page->getSlug()));
         }
 
         return $collection;
