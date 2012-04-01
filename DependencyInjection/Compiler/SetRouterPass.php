@@ -12,7 +12,7 @@ class SetRouterPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $container->setParameter('jms_i18n_routing.loader.class', 'Prototypr\SystemBundle\Router\Loader');
+        $container->setParameter('jms_i18n_routing.loader.class', $container->getParameter('prototypr.system.router_loader.class'));
         $container->findDefinition('jms_i18n_routing.loader')->addMethodCall('setDoctrine', array($container->findDefinition('doctrine')));
     }
 }

@@ -26,11 +26,6 @@ class Page extends Node
      */
     protected $application;
 
-    /**
-     * @var string $name
-     */
-    protected $name;
-
 
     public function __construct()
     {
@@ -97,23 +92,4 @@ class Page extends Node
         return $this->application;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
 }

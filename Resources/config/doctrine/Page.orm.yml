@@ -2,9 +2,6 @@ Prototypr\SystemBundle\Entity\Page:
   type: entity
   table: page
   repositoryClass: Prototypr\SystemBundle\Entity\PageRepository
-  fields:
-    name:
-      type: string
   oneToMany:
     children:
       targetEntity: Prototypr\SystemBundle\Entity\Page

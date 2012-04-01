@@ -7,3 +7,13 @@ Prototypr\SystemBundle\Entity\Node:
     title:
       type: string
       nullable: true
+    slug:
+      type: string
+      length: 255
+      nullable: true
+      gedmo:
+        slug:
+          fields: [name]
+          separator: -
+    name:
+      type: string

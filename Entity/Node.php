@@ -22,6 +22,16 @@ abstract class Node extends Base
      */
     protected $title;
 
+    /**
+     * @var string $slug
+     */
+    protected $slug;
+
+    /**
+     * @var string $name
+     */
+    protected $name;
+
 
     /**
      * Set headers
@@ -61,5 +71,45 @@ abstract class Node extends Base
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }
