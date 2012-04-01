@@ -19,21 +19,30 @@ class ApplicationLoader
     protected $doctrine;
 
     /**
-     * @var String
+     * @var string
      */
     protected $applicationName;
 
     /**
-     * @param RouteCollection $collection
+     * Construct
+     */
+    public function __construct($applicationName, $doctrine)
+    {
+        $this->applicationName = $applicationName;
+        $this->doctrine = $doctrine;
+    }
+
+    /**
      * @return RouteCollection
      * @throws RouterLoaderException
      */
-    public function load(RouteCollection $collection)
+    public function load()
     {
+        $collection = new RouteCollection();
         $pages = $this->findPages();
 
         foreach ($pages as $page) {
-            $collection->add('prototypr' . '_' .$application->getName() . '_' . $page->getId(), new Route($page->getTitle()));
+            $collection->add('prototypr_' . $this->applicationName . '_' . $page->getId(), new Route($page->getSlug()));
         }
 
         return $collection;
@@ -48,7 +57,7 @@ class ApplicationLoader
     protected function findPages()
     {
         $em = $this->doctrine->getEntityManager();
-        $pages =    $em->getRepository('PrototyprSystemBundle:Page')->findByApplication($this->findApplication()->getId());
+        $pages = $em->getRepository('PrototyprSystemBundle:Page')->findByApplication($this->findApplication()->getId());
 
         return $pages;
     }
@@ -66,19 +75,4 @@ class ApplicationLoader
         return $application;
     }
 
-    /**
-     * @param Registry $doctrine
-     */
-    public function setDoctrine($doctrine)
-    {
-        $this->doctrine = $doctrine;
-    }
-
-    /**
-     * @param string $applicationName
-     */
-    public function setApplicationName($applicationName)
-    {
-        $this->applicationName = strtolower($applicationName);
-    }
 }

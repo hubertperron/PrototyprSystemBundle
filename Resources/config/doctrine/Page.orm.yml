@@ -22,3 +22,4 @@ Prototypr\SystemBundle\Entity\Page:
         name: application_id
         referencedColumnName: id
         onDelete: cascade
+        nullable: false

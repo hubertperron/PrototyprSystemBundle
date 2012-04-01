@@ -2,9 +2,12 @@
 
 namespace Prototypr\SystemBundle\Router;
 
+use Exception;
+
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
 use Symfony\Bundle\DoctrineBundle\Registry;
+use Symfony\Component\DependencyInjection\Container;
 
 use Prototypr\SystemBundle\Exception\RouterLoaderException;
 
@@ -12,10 +15,21 @@ use JMS\I18nRoutingBundle\Router\I18nLoader as BaseLoader;
 
 class SystemLoader extends BaseLoader
 {
+
+    /**
+     * @var Container
+     */
+    protected $container;
+
     /**
      * @var Registry
      */
     protected $doctrine;
+
+    /**
+     * @var array
+     */
+    protected $applicationLoaders;
 
     /**
      * @param RouteCollection $collection
@@ -25,18 +39,10 @@ class SystemLoader extends BaseLoader
     public function load(RouteCollection $collection)
     {
         try {
-            $applications = $this->findApplications();
-
-            foreach ($applications as $application) {
-
-                $sectionRepo = $em->getRepository('PrototyprSystemBundle:Page');
-                $pages = $sectionRepo->findAll();
-
-                foreach ($pages as $page) {
-                    $collection->add('prototypr' . '_' .$application->getName() . '_' . $page->getId(), new Route($page->getTitle()));
-                }
+            foreach ($this->applicationLoaders as $loader) {
+                $collection->addCollection($this->container->get($loader)->load());
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new RouterLoaderException('[' . get_class($e) . ']' . "\n" . $e->getMessage());
         }
 
@@ -46,7 +52,7 @@ class SystemLoader extends BaseLoader
     }
 
     /**
-     * Fetch the application entity.
+     * Fetch active application entities from the database.
      *
      * @return array;
      */
@@ -58,6 +64,16 @@ class SystemLoader extends BaseLoader
         return $applications;
     }
 
+    /**
+     * An array of application loaders services
+     *
+     * @param array $loaders
+     */
+    public function setApplicationLoaders($loaders)
+    {
+        $this->applicationLoaders = $loaders;
+    }
+
 
     /**
      * @param Registry $doctrine
@@ -65,5 +81,13 @@ class SystemLoader extends BaseLoader
     public function setDoctrine($doctrine)
     {
         $this->doctrine = $doctrine;
+    }
+
+    /**
+     * @param Container $container
+     */
+    public function setContainer($container)
+    {
+        $this->container = $container;
     }
 }
