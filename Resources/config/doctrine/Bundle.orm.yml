@@ -5,6 +5,11 @@ Prototypr\SystemBundle\Entity\Bundle:
   fields:
     class:
       type: string
+      unique: true
+  oneToMany:
+    pageBundles:
+      targetEntity: Prototypr\SystemBundle\Entity\PageBundle
+      mappedBy: bundle
   manyToOne:
     application:
       fetch: EAGER

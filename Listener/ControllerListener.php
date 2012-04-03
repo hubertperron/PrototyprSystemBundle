@@ -47,10 +47,11 @@ class ControllerListener
      */
     public function onKernelController(FilterControllerEvent $event)
     {
+        $controller = $event->getController();
+        $controller = $controller[0];
+
         if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
 
-            $controller = $event->getController();
-            $controller = $controller[0];
             // The controller must implement the prototypr controller interface
             if (false == $controller instanceof ControllerInterface) {
                 return false;
@@ -62,6 +63,7 @@ class ControllerListener
             if (false == $applicationName) {
                 return false;
             }
+
             // The current application name must have a an associated kernel service
             if (false == $this->container->has('prototypr.' . $applicationName . '.kernel')) {
                 return false;
@@ -73,6 +75,10 @@ class ControllerListener
             // And here we go! (espérons que ça d'jam pas dan'l coude)
             $this->systemKernel->setApplicationKernel($applicationKernel);
             $this->systemKernel->init();
+        }
+
+        // Subrequest
+        if ($controller instanceof ControllerInterface) {
             $controller->init();
 
             return true;

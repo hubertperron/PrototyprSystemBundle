@@ -15,13 +15,23 @@ class Bundle extends Base
     /**
      * @var string $class
      */
-    private $class;
+    protected $class;
 
     /**
      * @var Prototypr\SystemBundle\Entity\Application
      */
-    private $application;
+    protected $application;
 
+    /**
+     * @var Prototypr\SystemBundle\Entity\PageBundle
+     */
+    protected $pageBundles;
+
+
+    public function __construct()
+    {
+        $this->pageBundles = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set class
@@ -61,5 +71,25 @@ class Bundle extends Base
     public function getApplication()
     {
         return $this->application;
+    }
+
+    /**
+     * Add pageBundles
+     *
+     * @param Prototypr\SystemBundle\Entity\PageBundle $pageBundles
+     */
+    public function addPageBundle(\Prototypr\SystemBundle\Entity\PageBundle $pageBundles)
+    {
+        $this->pageBundles[] = $pageBundles;
+    }
+
+    /**
+     * Get pageBundles
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getPageBundles()
+    {
+        return $this->pageBundles;
     }
 }

@@ -9,8 +9,6 @@ use Symfony\Bundle\DoctrineBundle\Registry;
 use Prototypr\SystemBundle\Exception\RouterLoaderException;
 use Prototypr\SystemBundle\Entity\Application;
 
-use JMS\I18nRoutingBundle\Router\I18nLoader as BaseLoader;
-
 class ApplicationLoader
 {
     /**
@@ -57,6 +55,10 @@ class ApplicationLoader
                 '_prototypr_page_slug' => $page->getSlug(),
                 '_prototypr_page_level' => $page->getLevel(),
             ));
+
+            if ($page->hasApplicationBundle($this->applicationName)) {
+
+            }
 
             $route = new Route(
                 $prefix . $slugs,

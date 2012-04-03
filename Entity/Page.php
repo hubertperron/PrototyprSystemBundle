@@ -26,6 +26,11 @@ class Page extends Node
      */
     protected $application;
 
+    /**
+     * @var Prototypr\SystemBundle\Entity\PageBundle
+     */
+    protected $pageBundles;
+
 
     public function __construct()
     {
@@ -121,13 +126,19 @@ class Page extends Node
     }
 
     /**
-     * Get the tree level of this page
+     * Get the tree level number
      *
      * @return int
      */
     public function getLevel()
     {
-      return count($this->getParents()) + 1;
+        return count($this->getParents()) + 1;
+    }
+
+
+    public function hasApplicationBundle($applicationName)
+    {
+
     }
 
     /**
@@ -150,4 +161,23 @@ class Page extends Node
         return $this->application;
     }
 
+    /**
+     * Add pageBundles
+     *
+     * @param Prototypr\SystemBundle\Entity\PageBundle $pageBundles
+     */
+    public function addPageBundle(\Prototypr\SystemBundle\Entity\PageBundle $pageBundles)
+    {
+        $this->pageBundles[] = $pageBundles;
+    }
+
+    /**
+     * Get pageBundles
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getPageBundles()
+    {
+        return $this->pageBundles;
+    }
 }
