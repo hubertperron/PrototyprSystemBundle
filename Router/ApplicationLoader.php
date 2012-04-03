@@ -45,17 +45,23 @@ class ApplicationLoader
 
         foreach ($pages as $page) {
 
-            $pathSegments = array();
-
+            $prefix = '';
             if ($application->getRoutingPrefix()) {
-                $pathSegments[] = $application->getRoutingPrefix();
+                $prefix = $application->getRoutingPrefix() . '/';
             }
 
-            $pathSegments = array_merge($pathSegments, $page->getParentSlugs(true));
+            $slugs = implode('/', $page->getParentSlugs(true));
+
+            $defaults = array_merge($this->getRouteDefaults(), array(
+                '_prototypr_page_id' => $page->getId(),
+                '_prototypr_page_slug' => $page->getSlug(),
+                '_prototypr_page_level' => $page->getLevel(),
+            ));
+
             $route = new Route(
-                implode('/', $pathSegments),
-                $this->getRouteDefaults(),
-                array(),
+                $prefix . $slugs,
+                $defaults,
+                $this->getRouteRequirements(),
                 $this->getRouteOptions()
             );
 
@@ -65,19 +71,31 @@ class ApplicationLoader
         return $collection;
     }
 
+    /**
+     * @return array
+     */
     protected function getRouteDefaults()
     {
         return array(
-            '_prototypr' => true,
-            '_application_name' => $this->applicationName
+            '_prototypr_enabled' => true,
+            '_prototypr_application' => $this->applicationName
         );
     }
 
+    /**
+     * @return array
+     */
+    protected function getRouteRequirements()
+    {
+        return array();
+    }
+
+    /**
+     * @return array
+     */
     protected function getRouteOptions()
     {
-        return array(
-            'i18n' => false
-        );
+        return array();
     }
 
     /**

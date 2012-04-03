@@ -121,6 +121,16 @@ class Page extends Node
     }
 
     /**
+     * Get the tree level of this page
+     *
+     * @return int
+     */
+    public function getLevel()
+    {
+      return count($this->getParents()) + 1;
+    }
+
+    /**
      * Set application
      *
      * @param Prototypr\SystemBundle\Entity\Application $application

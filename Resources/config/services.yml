@@ -4,6 +4,7 @@ parameters:
     prototypr.system.controller_listener.class: Prototypr\SystemBundle\Listener\ControllerListener
     prototypr.system.pre_persist_listener.class: Prototypr\SystemBundle\Listener\PrePersistListener
     prototypr.system.router_loader.class: Prototypr\SystemBundle\Router\SystemLoader
+    prototypr.system.router_cache.class: Prototypr\SystemBundle\Router\Cache
 
 services:
 
@@ -27,3 +28,10 @@ services:
         class: %prototypr.system.pre_persist_listener.class%
         tags:
             - { name: doctrine.event_listener, event: prePersist }
+
+    prototypr.system.router_cache:
+        class: %prototypr.system.router_cache.class%
+        arguments:
+          - [ @kernel ]
+
+
