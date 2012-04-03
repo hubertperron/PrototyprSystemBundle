@@ -17,7 +17,9 @@ services:
         class: %prototypr.system.controller_listener.class%
         tags:
           - { name: kernel.event_listener, event: kernel.controller }
-        arguments: [ @prototypr.system.kernel ]
+        arguments:
+          - [ @prototypr.system.kernel ]
+          - [ @service_container ]
         calls:
           - [ setLogger, [ @logger ] ]
 

@@ -5,6 +5,7 @@ Prototypr\SystemBundle\Entity\Application:
   fields:
     name:
       type: string
+      unique: true
   oneToMany:
     pages:
       targetEntity: Prototypr\SystemBundle\Entity\Page

@@ -40,10 +40,6 @@ class SystemKernel
     public function __construct()
     {
         $this->applicationKernels = array();
-
-        // Temporary hardcoded application kernels
-//        $this->applicationKernels['backend'] = new ApplicationKernel();
-//        $this->applicationKernels['frontend'] = new ApplicationKernel();
     }
 
     /**
@@ -61,7 +57,7 @@ class SystemKernel
 
         $this->applicationKernel->init();
 
-        $this->logger->addInfo('Prototypr initalized using kernel ' . $this->applicationKernel);
+        $this->logger->addInfo('Prototypr initialized using application kernel ' . $this->applicationKernel);
     }
 
     /**
@@ -79,6 +75,7 @@ class SystemKernel
      */
     public function setApplicationKernel($kernel)
     {
+        $this->addApplicationKernel($kernel);
         $this->applicationKernel = $kernel;
     }
 

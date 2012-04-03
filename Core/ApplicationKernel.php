@@ -5,9 +5,11 @@ namespace Prototypr\SystemBundle\Core;
 /**
  * Base implementation of an application kernel
  */
-abstract class ApplicationKernel implements ApplicationKernelInterface
+class ApplicationKernel implements ApplicationKernelInterface
 {
-
+    /**
+     * @var string
+     */
     protected $name;
 
     /**

@@ -5,6 +5,8 @@ namespace Prototypr\SystemBundle\Listener;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\DependencyInjection\Container;
 
 use Prototypr\SystemBundle\Core\SystemKernel;
 use Prototypr\SystemBundle\Core\ApplicationKernel;
@@ -18,19 +20,26 @@ class ControllerListener
     /**
      * @var SystemKernel
      */
-    private $systemKernel;
+    protected $systemKernel;
 
     /**
      * @var Logger
      */
-    private $logger;
+    protected $logger;
+
+    /**
+     * @var Container
+     */
+    protected $container;
 
     /**
      * @param SystemKernel $systemKernel
+     * @param Request $request
      */
-    public function __construct($systemKernel)
+    public function __construct($systemKernel, $container)
     {
         $this->systemKernel = $systemKernel;
+        $this->container = $container;
     }
 
     /**
@@ -42,31 +51,43 @@ class ControllerListener
 
             $controller = $event->getController();
             $controller = $controller[0];
-
             // The controller must implement the prototypr controller interface
             if (false == $controller instanceof ControllerInterface) {
                 return false;
             }
 
-            //! Hardcoded for testing purpose
-            $applicationKernel = new ApplicationKernel();
-            $applicationKernel->setName('backend');
+            $applicationName = $event->getRequest()->get('application_name');
+
+            // The current request must have a prototypr application defined
+            if (false == $applicationName) {
+                return false;
+            }
+            // The current application name must have a an associated kernel service
+            if (false == $this->container->has('prototypr.' . $applicationName . '.kernel')) {
+                return false;
+            }
+
+            $applicationKernel = $this->container->get('prototypr.' . $applicationName . '.kernel');
+            $applicationKernel->setName($applicationName);
 
             // And here we go! (espérons que ça d'jam pas dan'l coude)
             $this->systemKernel->setApplicationKernel($applicationKernel);
             $this->systemKernel->init();
+            $controller->init();
 
             return true;
         }
+
     }
 
     /**
      * Set monolog logger
      *
-     * @param Logger $logger The Logger
+     * @param Logger $logger
      */
     public function setLogger($logger)
     {
         $this->logger = $logger;
     }
+
 }
