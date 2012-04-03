@@ -22,6 +22,11 @@ class Application extends Base
     protected $pages;
 
     /**
+     * @var string $routingPrefix
+     */
+    private $routingPrefix;
+
+    /**
      * Construct
      */
     public function __construct()
@@ -67,5 +72,25 @@ class Application extends Base
     public function getPages()
     {
         return $this->pages;
+    }
+
+    /**
+     * Set routingPrefix
+     *
+     * @param string $routingPrefix
+     */
+    public function setRoutingPrefix($routingPrefix)
+    {
+        $this->routingPrefix = $routingPrefix;
+    }
+
+    /**
+     * Get routingPrefix
+     *
+     * @return string 
+     */
+    public function getRoutingPrefix()
+    {
+        return $this->routingPrefix;
     }
 }

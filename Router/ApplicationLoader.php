@@ -39,13 +39,45 @@ class ApplicationLoader
     public function load()
     {
         $collection = new RouteCollection();
+
+        $application = $this->findApplication();
         $pages = $this->findPages();
 
         foreach ($pages as $page) {
-            $collection->add('prototypr_' . $this->applicationName . '_id_' . $page->getId(), new Route($page->getSlug()));
+
+            $pathSegments = array();
+
+            if ($application->getRoutingPrefix()) {
+                $pathSegments[] = $application->getRoutingPrefix();
+            }
+
+            $pathSegments = array_merge($pathSegments, $page->getParentSlugs(true));
+            $route = new Route(
+                implode('/', $pathSegments),
+                $this->getRouteDefaults(),
+                array(),
+                $this->getRouteOptions()
+            );
+
+            $collection->add('prototypr_' . $this->applicationName . '_id_' . $page->getId(), $route);
         }
 
         return $collection;
+    }
+
+    protected function getRouteDefaults()
+    {
+        return array(
+            '_prototypr' => true,
+            '_application_name' => $this->applicationName
+        );
+    }
+
+    protected function getRouteOptions()
+    {
+        return array(
+            'i18n' => false
+        );
     }
 
     /**

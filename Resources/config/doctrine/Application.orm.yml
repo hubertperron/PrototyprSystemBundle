@@ -6,6 +6,10 @@ Prototypr\SystemBundle\Entity\Application:
     name:
       type: string
       unique: true
+    routingPrefix:
+      column: routing_prefix
+      type: string
+      unique: true
   oneToMany:
     pages:
       targetEntity: Prototypr\SystemBundle\Entity\Page

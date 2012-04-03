@@ -17,6 +17,7 @@ class LoadApplicationData extends AbstractFixture implements OrderedFixtureInter
     {
         $application = new Application();
         $application->setName('backend');
+        $application->setRoutingPrefix('admin');
         $application->setOrdering(1);
         $application->setActive(true);
 
@@ -24,6 +25,7 @@ class LoadApplicationData extends AbstractFixture implements OrderedFixtureInter
 
         $application = new Application();
         $application->setName('frontend');
+        $application->setRoutingPrefix('');
         $application->setOrdering(2);
         $application->setActive(true);
 
