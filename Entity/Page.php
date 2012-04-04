@@ -135,10 +135,23 @@ class Page extends Node
         return count($this->getParents()) + 1;
     }
 
-
-    public function hasApplicationBundle($applicationName)
+    /**
+     * Get every bundle entities connected to this page for a given application
+     *
+     * @param $applicationName
+     * @return array
+     */
+    public function getBundlesForApplication($applicationName)
     {
+        $bundles = array();
 
+        foreach ($this->pageBundles as $pageBundle) {
+            if ($pageBundle->getBundle()->getApplication()->getName() == $applicationName) {
+                $bundles[] = $pageBundle->getBundle();
+            }
+        }
+
+        return $bundles;
     }
 
     /**

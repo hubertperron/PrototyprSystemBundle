@@ -2,9 +2,11 @@
 
 namespace Prototypr\SystemBundle\Router;
 
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
 use Symfony\Bundle\DoctrineBundle\Registry;
+use Symfony\Component\Yaml\Parser;
 
 use Prototypr\SystemBundle\Exception\RouterLoaderException;
 use Prototypr\SystemBundle\Entity\Application;
@@ -22,6 +24,11 @@ class ApplicationLoader
     protected $applicationName;
 
     /**
+     * @var Kernel
+     */
+    protected $kernel;
+
+    /**
      * Construct
      */
     public function __construct($applicationName, $doctrine)
@@ -36,6 +43,7 @@ class ApplicationLoader
      */
     public function load()
     {
+        $parser = new Parser();
         $collection = new RouteCollection();
 
         $application = $this->findApplication();
@@ -43,12 +51,11 @@ class ApplicationLoader
 
         foreach ($pages as $page) {
 
-            $prefix = '';
-            if ($application->getRoutingPrefix()) {
-                $prefix = $application->getRoutingPrefix() . '/';
-            }
+            $pattern = implode('/', $page->getParentSlugs(true));
 
-            $slugs = implode('/', $page->getParentSlugs(true));
+            if ($application->getRoutingPrefix()) {
+                $pattern = $application->getRoutingPrefix() . '/' . $pattern;
+            }
 
             $defaults = array_merge($this->getRouteDefaults(), array(
                 '_prototypr_page_id' => $page->getId(),
@@ -56,18 +63,39 @@ class ApplicationLoader
                 '_prototypr_page_level' => $page->getLevel(),
             ));
 
-            if ($page->hasApplicationBundle($this->applicationName)) {
+            $requirements = $this->getRouteRequirements();
+            $options = $this->getRouteOptions();
 
+            // Merging the associated bundle entities
+            foreach ($page->getBundlesForApplication($this->applicationName) as $bundle) {
+
+                $this->kernel->getBundle($bundle->getClass()); // Validating that the bundle is correctly registered
+
+                // TODO: Support multiple file format
+                $routes = $parser->parse(file_get_contents($this->kernel->locateResource('@' . $bundle->getName() . '/Resources/config/routing.yml')));
+
+                // Append each of the bundle routes to the current section route
+                foreach ($routes as $route) {
+
+                    if (false == $route['options']['mergeWithPage']) {
+                        continue;
+                    }
+
+                    $pattern = $pattern . '/' . $route['pattern'];
+                    $defaults = array_merge($defaults, $route['defaults']);
+                    $requirements = array_merge($requirements, $route['requirements']);
+                    $options = array_merge($options, $route['options']);
+
+                    $route = new Route(
+                        $pattern,
+                        $defaults,
+                        $requirements,
+                        $options
+                    );
+
+                    $collection->add('prototypr_' . $this->applicationName . '_id_' . $page->getId(), $route);
+                }
             }
-
-            $route = new Route(
-                $prefix . $slugs,
-                $defaults,
-                $this->getRouteRequirements(),
-                $this->getRouteOptions()
-            );
-
-            $collection->add('prototypr_' . $this->applicationName . '_id_' . $page->getId(), $route);
         }
 
         return $collection;
@@ -97,7 +125,10 @@ class ApplicationLoader
      */
     protected function getRouteOptions()
     {
-        return array();
+        return array(
+            'mergeWithPage' => false,
+            'pageDefault' => false
+        );
     }
 
     /**
@@ -117,7 +148,7 @@ class ApplicationLoader
     /**
      * Fetch the application entity.
      *
-     * @return Application;
+     * @return Application
      */
     protected function findApplication()
     {
@@ -125,6 +156,14 @@ class ApplicationLoader
         $application = $em->getRepository('PrototyprSystemBundle:Application')->findOneByName($this->applicationName);
 
         return $application;
+    }
+
+    /**
+     * @param Kernel $kernel
+     */
+    public function setKernel($kernel)
+    {
+        $this->kernel = $kernel;
     }
 
 }

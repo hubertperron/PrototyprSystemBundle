@@ -12,7 +12,6 @@ Prototypr\SystemBundle\Entity\Bundle:
       mappedBy: bundle
   manyToOne:
     application:
-      fetch: EAGER
       targetEntity: Prototypr\SystemBundle\Entity\Application
       inversedBy: bundles
       joinColumn:
