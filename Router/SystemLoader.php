@@ -38,15 +38,15 @@ class SystemLoader extends BaseLoader
      */
     public function load(RouteCollection $collection)
     {
+        $collection = parent::load($collection);
+
         try {
             foreach ($this->applicationLoaders as $loader) {
-                $collection->addCollection($this->container->get($loader)->load());
+                $this->container->get($loader)->load($collection);
             }
         } catch (Exception $e) {
             throw new RouterLoaderException('[' . get_class($e) . ']' . "\n" . $e->getMessage());
         }
-
-        $collection = parent::load($collection);
 
         return $collection;
     }

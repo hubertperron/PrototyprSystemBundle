@@ -38,13 +38,13 @@ class ApplicationLoader
     }
 
     /**
+     * @param RouteCollection
      * @return RouteCollection
      * @throws RouterLoaderException
      */
-    public function load()
+    public function load(RouteCollection $collection)
     {
         $parser = new Parser();
-        $collection = new RouteCollection();
 
         $application = $this->findApplication();
         $pages = $this->findPages();
@@ -60,6 +60,7 @@ class ApplicationLoader
             $defaults = array_merge($this->getRouteDefaults(), array(
                 '_prototypr_page_id' => $page->getId(),
                 '_prototypr_page_slug' => $page->getSlug(),
+                '_prototypr_page_parent_slugs' => implode('/', $page->getParentSlugs()),
                 '_prototypr_page_level' => $page->getLevel(),
             ));
 
@@ -72,28 +73,35 @@ class ApplicationLoader
                 $this->kernel->getBundle($bundle->getClass()); // Validating that the bundle is correctly registered
 
                 // TODO: Support multiple file format
-                $routes = $parser->parse(file_get_contents($this->kernel->locateResource('@' . $bundle->getName() . '/Resources/config/routing.yml')));
+                $routes = $parser->parse(file_get_contents($this->kernel->locateResource('@' . $bundle->getClass() . '/Resources/config/routing.yml')));
 
                 // Append each of the bundle routes to the current section route
-                foreach ($routes as $route) {
+                foreach ($routes as $name => $route) {
 
-                    if (false == $route['options']['mergeWithPage']) {
+                    $mergedPattern = $pattern . $route['pattern'];
+                    $mergedDefaults = array_merge($defaults, $route['defaults']);
+                    $mergedRequirements = array_merge($requirements, isset($route['requirements']) ? $route['requirements'] : array());
+                    $mergedOptions = array_merge($options, isset($route['options']) ? $route['options'] : array());
+
+                    if (false == $mergedOptions['mergeWithPage']) {
                         continue;
                     }
 
-                    $pattern = $pattern . '/' . $route['pattern'];
-                    $defaults = array_merge($defaults, $route['defaults']);
-                    $requirements = array_merge($requirements, $route['requirements']);
-                    $options = array_merge($options, $route['options']);
-
                     $route = new Route(
-                        $pattern,
-                        $defaults,
-                        $requirements,
-                        $options
+                        $mergedPattern,
+                        $mergedDefaults,
+                        $mergedRequirements,
+                        $mergedOptions
                     );
 
-                    $collection->add('prototypr_' . $this->applicationName . '_id_' . $page->getId(), $route);
+                    echo $name;
+                    $collection->remove($name);
+
+                    if ($mergedOptions['pageDefault']) {
+                        $collection->add('prototypr_' . $this->applicationName . '_id_' . $page->getId(), $route);
+                    }
+
+                    $collection->add('prototypr_' . $this->applicationName . '_' . $name, $route);
                 }
             }
         }
@@ -127,7 +135,8 @@ class ApplicationLoader
     {
         return array(
             'mergeWithPage' => false,
-            'pageDefault' => false
+            'pageDefault' => false,
+//            'i18n' => false // Disable JMSI18nRouting route handling, this loader (will) handle I18n on his own.
         );
     }
 
