@@ -6,7 +6,10 @@ use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
 use Symfony\Bundle\DoctrineBundle\Registry;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Yaml\Parser;
+
+use JMS\I18nRoutingBundle\Router\I18nLoader;
 
 use Prototypr\SystemBundle\Exception\RouterLoaderException;
 use Prototypr\SystemBundle\Entity\Application;
@@ -29,6 +32,11 @@ class ApplicationLoader
     protected $kernel;
 
     /**
+     * @var Container
+     */
+    protected $container;
+
+    /**
      * Construct
      */
     public function __construct($applicationName, $doctrine)
@@ -44,8 +52,6 @@ class ApplicationLoader
      */
     public function load(RouteCollection $collection)
     {
-        $parser = new Parser();
-
         $application = $this->findApplication();
         $pages = $this->findPages();
 
@@ -72,41 +78,66 @@ class ApplicationLoader
 
                 $this->kernel->getBundle($bundle->getClass()); // Validating that the bundle is correctly registered
 
-                // TODO: Support multiple file format
-                $routes = $parser->parse(file_get_contents($this->kernel->locateResource('@' . $bundle->getClass() . '/Resources/config/routing.yml')));
-
                 // Append each of the bundle routes to the current section route
-                foreach ($routes as $name => $route) {
+                foreach ($collection->all() as $name => $route) {
 
-                    $mergedPattern = $pattern . $route['pattern'];
-                    $mergedDefaults = array_merge($defaults, $route['defaults']);
-                    $mergedRequirements = array_merge($requirements, isset($route['requirements']) ? $route['requirements'] : array());
-                    $mergedOptions = array_merge($options, isset($route['options']) ? $route['options'] : array());
-
-                    if (false == $mergedOptions['mergeWithPage']) {
+                    if (false == $this->routeNameMatchBundleClass($name, $bundle->getClass())) {
                         continue;
                     }
 
-                    $route = new Route(
-                        $mergedPattern,
-                        $mergedDefaults,
-                        $mergedRequirements,
-                        $mergedOptions
-                    );
-
-                    echo $name;
-                    $collection->remove($name);
-
-                    if ($mergedOptions['pageDefault']) {
-                        $collection->add('prototypr_' . $this->applicationName . '_id_' . $page->getId(), $route);
+                    if (false == $route->getOption('mergeWithPage')) {
+                        continue;
                     }
 
-                    $collection->add('prototypr_' . $this->applicationName . '_' . $name, $route);
+                    // Bring back the locale to the beginning of the pattern
+                    $locales = implode('|', $this->container->getParameter('jms_i18n_routing.locales'));
+                    if (preg_match('/(\/' . $locales . ')/', $route->getPattern(), $matches)) {
+                        $pattern = $matches[1] . $pattern;
+                    }
+
+                    $finalPattern = $pattern . $route->getPattern();
+                    $finalDefaults = array_merge($defaults, $route->getDefaults());
+                    $finalRequirements = array_merge($requirements, $route->getRequirements());
+                    $finalOptions = array_merge($options, $route->getRequirements());
+
+                    $route = new Route(
+                        $finalPattern,
+                        $finalDefaults,
+                        $finalRequirements,
+                        $finalOptions
+                    );
+
+//                    $collection->remove($name);
+
+                    if ($finalOptions['pageDefault']) {
+                        $collection->add('prototypr_id_' . $page->getId(), $route);
+                    }
+
+                    $collection->add($name, $route);
                 }
             }
         }
 
         return $collection;
+    }
+
+    /**
+     * routeName: frontend_news_bundle_index
+     * bundleName: PrototyprFrontendNewsBundle
+     *
+     * @param $routeName
+     * @param $bundleClass
+     * @return bool
+     */
+    protected function routeNameMatchBundleClass($routeName, $bundleClass)
+    {
+        $bundleClass = strtolower(preg_replace('/^Prototypr/', '', $bundleClass));
+        $routeName = preg_replace('/(.*)' . preg_quote(I18nLoader::ROUTING_PREFIX) . '/', '', $routeName);
+        $routeName = str_replace('_', '', $routeName);
+
+        if (preg_match('/^' . $bundleClass . '/', $routeName)) {
+            return true;
+        }
     }
 
     /**
@@ -136,7 +167,6 @@ class ApplicationLoader
         return array(
             'mergeWithPage' => false,
             'pageDefault' => false,
-//            'i18n' => false // Disable JMSI18nRouting route handling, this loader (will) handle I18n on his own.
         );
     }
 
@@ -173,6 +203,14 @@ class ApplicationLoader
     public function setKernel($kernel)
     {
         $this->kernel = $kernel;
+    }
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\Container $container
+     */
+    public function setContainer($container)
+    {
+        $this->container = $container;
     }
 
 }
