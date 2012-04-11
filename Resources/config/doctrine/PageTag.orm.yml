@@ -1,0 +1,17 @@
+Prototypr\SystemBundle\Entity\PageTag:
+  type: entity
+  table: page_tag
+  repositoryClass: Prototypr\SystemBundle\Entity\PageTagRepository
+  fields:
+    name:
+      type: string
+      unique: true
+  manyToOne:
+    page:
+      targetEntity: Prototypr\SystemBundle\Entity\Page
+      inversedBy: tags
+      joinColumn:
+        name: page_id
+        referencedColumnName: id
+        nullable: false
+        onDelete: cascade

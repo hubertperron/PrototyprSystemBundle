@@ -114,14 +114,19 @@ class ApplicationLoader
                      * a page can have one or more connected bundles.
                      *
                      * Route generation strategies:
-                     *  1. Generating a shortcut route to a bundle using the master connection (en__RG__frontend_news_bundle_detail)
-                     *  2. Generating a specific route for the page-bundle connection (en__RG__page_id_5_frontend_news_bundle_detail)
+                     *  1. Generating a shortcut route to a bundle using the master page-bundle connection (en__RG__frontend_news_bundle_detail)
+                     *  2. Generating a direct route to a page (en__RG__page_id_5 )
+                     *  3. Generating a specific route for the page-bundle connection (en__RG__page_id_5_frontend_news_bundle_detail)
                      */
 
                     if ($pageBundle->getMaster()) {
                         $collection->add($name, $route);
                     } else {
                         $collection->remove($name);
+                    }
+
+                    if ($route->getOption('pageDefault') && $pageBundle->getMaster()) {
+                        $collection->add($route->getDefault('_locale') . I18nLoader::ROUTING_PREFIX . 'page_id_' . $page->getId(), $route);
                     }
 
                     $collection->add(preg_replace('/(' . I18nLoader::ROUTING_PREFIX . ')/', '$1page_id_' . $page->getId() . '_' , $name), $route);

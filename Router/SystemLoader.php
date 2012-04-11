@@ -54,7 +54,7 @@ class SystemLoader extends BaseLoader
     /**
      * Fetch active application entities from the database.
      *
-     * @return array;
+     * @return array
      */
     protected function findApplications()
     {
