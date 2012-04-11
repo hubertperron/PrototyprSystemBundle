@@ -12,20 +12,24 @@ use Prototypr\SystemBundle\Entity\Base;
 class PageBundle extends Base
 {
     /**
-     * @var Prototypr\SystemBundle\Entity\Page
+     * @var Page
      */
     protected $page;
 
     /**
-     * @var Prototypr\SystemBundle\Entity\Bundle
+     * @var Bundle
      */
     protected $bundle;
 
+    /**
+     * @var boolean $master
+     */
+    protected $master;
 
     /**
      * Set page
      *
-     * @param Prototypr\SystemBundle\Entity\Page $page
+     * @param Page $page
      */
     public function setPage(\Prototypr\SystemBundle\Entity\Page $page)
     {
@@ -35,7 +39,7 @@ class PageBundle extends Base
     /**
      * Get page
      *
-     * @return Prototypr\SystemBundle\Entity\Page 
+     * @return Page
      */
     public function getPage()
     {
@@ -45,7 +49,7 @@ class PageBundle extends Base
     /**
      * Set bundle
      *
-     * @param Prototypr\SystemBundle\Entity\Bundle $bundle
+     * @param Bundle $bundle
      */
     public function setBundle(\Prototypr\SystemBundle\Entity\Bundle $bundle)
     {
@@ -55,10 +59,30 @@ class PageBundle extends Base
     /**
      * Get bundle
      *
-     * @return Prototypr\SystemBundle\Entity\Bundle 
+     * @return Bundle
      */
     public function getBundle()
     {
         return $this->bundle;
+    }
+
+    /**
+     * Set master
+     *
+     * @param boolean $master
+     */
+    public function setMaster($master)
+    {
+        $this->master = $master;
+    }
+
+    /**
+     * Get master
+     *
+     * @return boolean 
+     */
+    public function getMaster()
+    {
+        return $this->master;
     }
 }

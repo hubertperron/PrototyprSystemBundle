@@ -1,6 +1,10 @@
 Prototypr\SystemBundle\Entity\PageBundle:
   type: entity
   table: page_bundle
+  fields:
+    master:
+      type: boolean
+      default: false
   manyToOne:
     page:
       targetEntity: Prototypr\SystemBundle\Entity\Page

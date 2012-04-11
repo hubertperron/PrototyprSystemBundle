@@ -38,6 +38,9 @@ class ApplicationLoader
 
     /**
      * Construct
+     *
+     * @param $applicationName
+     * @param $doctrine
      */
     public function __construct($applicationName, $doctrine)
     {
@@ -46,9 +49,8 @@ class ApplicationLoader
     }
 
     /**
-     * @param RouteCollection
+     * @param RouteCollection $collection
      * @return RouteCollection
-     * @throws RouterLoaderException
      */
     public function load(RouteCollection $collection)
     {
@@ -58,15 +60,16 @@ class ApplicationLoader
         foreach ($pages as $page) {
 
             $pattern = implode('/', $page->getParentSlugs(true));
-
             if ($application->getRoutingPrefix()) {
                 $pattern = $application->getRoutingPrefix() . '/' . $pattern;
             }
+            $pattern = '/' . $pattern;
 
             $defaults = array_merge($this->getRouteDefaults(), array(
                 '_prototypr_page_id' => $page->getId(),
                 '_prototypr_page_slug' => $page->getSlug(),
-                '_prototypr_page_parent_slugs' => implode('/', $page->getParentSlugs()),
+                '_prototypr_page_parent_slugs' => $page->getParentSlugs(),
+                '_prototypr_page_parent_slugs_imploded' => implode('/', $page->getParentSlugs()),
                 '_prototypr_page_level' => $page->getLevel(),
             ));
 
@@ -74,46 +77,54 @@ class ApplicationLoader
             $options = $this->getRouteOptions();
 
             // Merging the associated bundle entities
-            foreach ($page->getBundlesForApplication($this->applicationName) as $bundle) {
+            foreach ($page->getPageBundlesForApplication($this->applicationName) as $pageBundle) {
+
+                $bundle = $pageBundle->getBundle();
 
                 $this->kernel->getBundle($bundle->getClass()); // Validating that the bundle is correctly registered
 
                 // Append each of the bundle routes to the current section route
                 foreach ($collection->all() as $name => $route) {
 
-                    if (false == $this->routeNameMatchBundleClass($name, $bundle->getClass())) {
+                    if (false == $route->getOption('mergeWithPage')) {
                         continue;
                     }
 
-                    if (false == $route->getOption('mergeWithPage')) {
+                    if (false == $this->routeNameMatchBundleClass($name, $bundle->getClass())) {
                         continue;
                     }
 
                     // Bring back the locale to the beginning of the pattern
                     $locales = implode('|', $this->container->getParameter('jms_i18n_routing.locales'));
                     if (preg_match('/(\/' . $locales . ')/', $route->getPattern(), $matches)) {
-                        $pattern = $matches[1] . $pattern;
+                        $locale = $matches[1];
+                    } else {
+                        $locale = '';
                     }
-
-                    $finalPattern = $pattern . $route->getPattern();
-                    $finalDefaults = array_merge($defaults, $route->getDefaults());
-                    $finalRequirements = array_merge($requirements, $route->getRequirements());
-                    $finalOptions = array_merge($options, $route->getRequirements());
 
                     $route = new Route(
-                        $finalPattern,
-                        $finalDefaults,
-                        $finalRequirements,
-                        $finalOptions
+                        $locale . $pattern . preg_replace('/^' . preg_quote($locale, '/') . '/', '', $route->getPattern()),
+                        array_merge($defaults, $route->getDefaults()),
+                        array_merge($requirements, $route->getRequirements()),
+                        array_merge($options, $route->getOptions())
                     );
 
-//                    $collection->remove($name);
+                    /**
+                     * A bundle can be connected to one or more pages and
+                     * a page can have one or more connected bundles.
+                     *
+                     * Route generation strategies:
+                     *  1. Generating a shortcut route to a bundle using the master connection (en__RG__frontend_news_bundle_detail)
+                     *  2. Generating a specific route for the page-bundle connection (en__RG__page_id_5_frontend_news_bundle_detail)
+                     */
 
-                    if ($finalOptions['pageDefault']) {
-                        $collection->add('prototypr_id_' . $page->getId(), $route);
+                    if ($pageBundle->getMaster()) {
+                        $collection->add($name, $route);
+                    } else {
+                        $collection->remove($name);
                     }
 
-                    $collection->add($name, $route);
+                    $collection->add(preg_replace('/(' . I18nLoader::ROUTING_PREFIX . ')/', '$1page_id_' . $page->getId() . '_' , $name), $route);
                 }
             }
         }
@@ -173,7 +184,6 @@ class ApplicationLoader
     /**
      * Fetch the associated page entities of an application.
      *
-     * @param integer $applicationId
      * @return array
      */
     protected function findPages()
@@ -206,7 +216,7 @@ class ApplicationLoader
     }
 
     /**
-     * @param \Symfony\Component\DependencyInjection\Container $container
+     * @param Container $container
      */
     public function setContainer($container)
     {

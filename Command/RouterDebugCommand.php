@@ -52,21 +52,15 @@ EOF
 
         $maxName = 4;
         $maxMethod = 6;
-        $maxPattern = 7;
         foreach ($routes as $name => $route) {
             $requirements = $route->getRequirements();
             $method = isset($requirements['_method']) ? strtoupper(is_array($requirements['_method']) ? implode(', ', $requirements['_method']) : $requirements['_method']) : 'ANY';
-            $pattern = $route->getPattern();
             if (strlen($name) > $maxName) {
                 $maxName = strlen($name);
             }
 
             if (strlen($method) > $maxMethod) {
                 $maxMethod = strlen($method);
-            }
-
-            if (strlen($pattern) > $maxPattern) {
-                $maxPattern = strlen($pattern) + 14;
             }
         }
         $format  = '%-'.$maxName.'s %-'.$maxMethod.'s %s';
@@ -80,9 +74,9 @@ EOF
             $method = isset($requirements['_method']) ? strtoupper(is_array($requirements['_method']) ? implode(', ', $requirements['_method']) : $requirements['_method']) : 'ANY';
             $pattern = $route->getPattern();
             if ($pageSlug = $route->getRoute()->getDefault('_prototypr_page_slug')) {
-                $pattern = preg_replace('/(' . preg_quote($pageSlug, '/') . ')/', '<fg=green>$1</>', $pattern);
+                $pattern = preg_replace('/\/(' . preg_quote($pageSlug, '/') . ')/', '/<fg=green>$1</>', $pattern);
             }
-            if ($parentSlugs = $route->getRoute()->getDefault('_prototypr_page_parent_slugs')) {
+            if ($parentSlugs = $route->getRoute()->getDefault('_prototypr_page_parent_slugs_imploded')) {
                 $pattern = preg_replace('/(' . preg_quote($parentSlugs, '/'). ')/', '<fg=blue>$1</>', $pattern);
             }
             $output->writeln(sprintf($format, $name, $method, $pattern));

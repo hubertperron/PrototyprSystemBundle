@@ -40,7 +40,7 @@ class Page extends Node
     /**
      * Add children
      *
-     * @param Prototypr\SystemBundle\Entity\Page $children
+     * @param Page $children
      */
     public function addPage(\Prototypr\SystemBundle\Entity\Page $children)
     {
@@ -60,7 +60,7 @@ class Page extends Node
     /**
      * Set parent
      *
-     * @param Prototypr\SystemBundle\Entity\Page $parent
+     * @param Page $parent
      */
     public function setParent(\Prototypr\SystemBundle\Entity\Page $parent)
     {
@@ -155,11 +155,30 @@ class Page extends Node
     }
 
     /**
+     * Get every bundle entities connected to this page for a given application
+     *
+     * @param $applicationName
+     * @return array
+     */
+    public function getPageBundlesForApplication($applicationName)
+    {
+        $pageBundles = array();
+
+        foreach ($this->pageBundles as $pageBundle) {
+            if ($pageBundle->getBundle()->getApplication()->getName() == $applicationName) {
+                $pageBundles[] = $pageBundle;
+            }
+        }
+
+        return $pageBundles;
+    }
+
+    /**
      * Set application
      *
-     * @param Prototypr\SystemBundle\Entity\Application $application
+     * @param Application $application
      */
-    public function setApplication(\Prototypr\SystemBundle\Entity\Application $application)
+    public function setApplication(Application $application)
     {
         $this->application = $application;
     }
@@ -167,7 +186,7 @@ class Page extends Node
     /**
      * Get application
      *
-     * @return Prototypr\SystemBundle\Entity\Application 
+     * @return Application
      */
     public function getApplication()
     {
@@ -177,9 +196,9 @@ class Page extends Node
     /**
      * Add pageBundles
      *
-     * @param Prototypr\SystemBundle\Entity\PageBundle $pageBundles
+     * @param PageBundle $pageBundles
      */
-    public function addPageBundle(\Prototypr\SystemBundle\Entity\PageBundle $pageBundles)
+    public function addPageBundle(PageBundle $pageBundles)
     {
         $this->pageBundles[] = $pageBundles;
     }
@@ -187,7 +206,7 @@ class Page extends Node
     /**
      * Get pageBundles
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getPageBundles()
     {
