@@ -18,21 +18,14 @@ class SystemKernel
     /**
      * @var Logger
      */
-    private $logger;
-
-    /**
-     * A collection of available application kernels
-     *
-     * @var array
-     */
-    private $applicationKernels;
+    protected $logger;
 
     /**
      * The currently loaded application kernel
      *
      * @var ApplicationKernel
      */
-    private $applicationKernel;
+    protected $applicationKernel;
 
     /**
      * Construct
@@ -44,6 +37,9 @@ class SystemKernel
 
     /**
      * Init
+     *
+     * @throws ApplicationNotFoundException
+     * @throws ApplicationNotBoundException
      */
     public function init()
     {
@@ -75,7 +71,6 @@ class SystemKernel
      */
     public function setApplicationKernel($kernel)
     {
-        $this->addApplicationKernel($kernel);
         $this->applicationKernel = $kernel;
     }
 
@@ -85,35 +80,5 @@ class SystemKernel
     public function getApplicationKernel()
     {
         return $this->applicationKernel;
-    }
-
-    /**
-     * Set the application kernels.
-     *
-     * @param array $applicationKernels
-     */
-    public function setApplicationKernels($kernels)
-    {
-        $this->applicationKernels = $kernels;
-    }
-
-    /**
-     * Get the application kernels.
-     *
-     * @return array
-     */
-    public function getApplicationKernels()
-    {
-        return $this->applicationKernels;
-    }
-
-    /**
-     * Add a application kernel.
-     *
-     * @param ApplicationKernel $kernel
-     */
-    public function addApplicationKernel($kernel)
-    {
-        $this->applicationKernels[$kernel->getName()] = $kernel;
     }
 }
