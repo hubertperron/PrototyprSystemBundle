@@ -28,6 +28,16 @@ class SystemKernel
     protected $applicationKernel;
 
     /**
+     * @var Request
+     */
+    protected $masterRequest;
+
+    /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
      * Construct
      */
     public function __construct()
@@ -80,5 +90,37 @@ class SystemKernel
     public function getApplicationKernel()
     {
         return $this->applicationKernel;
+    }
+
+    /**
+     * @param Request $masterRequest
+     */
+    public function setMasterRequest($masterRequest)
+    {
+        $this->masterRequest = $masterRequest;
+    }
+
+    /**
+     * @return Request
+     */
+    public function getMasterRequest()
+    {
+        return $this->masterRequest;
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 }

@@ -122,14 +122,14 @@ class ApplicationLoader
                     if ($pageBundle->getMaster()) {
                         $collection->add($name, $route);
                     } else {
-                        $collection->remove($name);
                     }
+                    $collection->remove($name);
 
                     if ($route->getOption('pageDefault') && $pageBundle->getMaster()) {
-                        $collection->add($route->getDefault('_locale') . I18nLoader::ROUTING_PREFIX . 'page_id_' . $page->getId(), $route);
+                        $collection->add($route->getDefault('_locale') . I18nLoader::ROUTING_PREFIX . $page->getApplication()->getName() . '_page_' . $page->getId(), $route);
                     }
 
-                    $collection->add(preg_replace('/(' . I18nLoader::ROUTING_PREFIX . ')/', '$1page_id_' . $page->getId() . '_' , $name), $route);
+                    $collection->add(preg_replace('/(' . I18nLoader::ROUTING_PREFIX . ')/', '$1' . $page->getApplication()->getName() . '_page_' . $page->getId() . '_' , $name), $route);
                 }
             }
         }

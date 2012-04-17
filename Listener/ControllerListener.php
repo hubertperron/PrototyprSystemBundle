@@ -7,6 +7,7 @@ use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Prototypr\SystemBundle\Core\SystemKernel;
 use Prototypr\SystemBundle\Core\ApplicationKernel;
@@ -34,7 +35,7 @@ class ControllerListener
 
     /**
      * @param SystemKernel $systemKernel
-     * @param Request $request
+     * @param Container $container
      */
     public function __construct($systemKernel, $container)
     {
@@ -50,17 +51,52 @@ class ControllerListener
         $controller = $event->getController();
         $controller = $controller[0];
 
-        if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
+        if ($this->isPrototyprEnabled($event->getRequestType(), $event->getRequest(), $controller)) {
 
-            // The controller must implement the prototypr controller interface
-            if (false == $controller instanceof ControllerInterface) {
+            if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
+
+                $applicationName = $event->getRequest()->get('_prototypr_application');
+
+                $applicationKernel = $this->container->get('prototypr.' . $applicationName . '.kernel');
+                $applicationKernel->setName($applicationName);
+
+                // And here we go! (espérons que ça d'jam pas dan'l coude)
+                $this->systemKernel->setMasterRequest($event->getRequest());
+                $this->systemKernel->setApplicationKernel($applicationKernel);
+            }
+
+            $this->systemKernel->setRequest($event->getRequest());
+            $this->systemKernel->init();
+
+            $controller->init();
+        }
+    }
+
+    /**
+     * Check if the current request is a prototypr compatible one.
+     *
+     * @param $requestType
+     * @param Request $request
+     * @param Controller $controller
+     *
+     * @return bool
+     */
+    protected function isPrototyprEnabled($requestType, Request $request, Controller $controller)
+    {
+        // The controller must implement the prototypr controller interface
+        if (false == $controller instanceof ControllerInterface) {
+            return false;
+        }
+
+        if (HttpKernelInterface::MASTER_REQUEST === $requestType) {
+
+            // The current request must have a prototypr enabled parameter
+            if (false == $request->get('_prototypr_enabled')) {
                 return false;
             }
 
-            $applicationName = $event->getRequest()->get('application_name');
-
-            // The current request must have a prototypr application defined
-            if (false == $applicationName) {
+            // The current request must have a prototypr application parameter defined
+            if (false == $applicationName = $request->get('_prototypr_application')) {
                 return false;
             }
 
@@ -68,22 +104,9 @@ class ControllerListener
             if (false == $this->container->has('prototypr.' . $applicationName . '.kernel')) {
                 return false;
             }
-
-            $applicationKernel = $this->container->get('prototypr.' . $applicationName . '.kernel');
-            $applicationKernel->setName($applicationName);
-
-            // And here we go! (espérons que ça d'jam pas dan'l coude)
-            $this->systemKernel->setApplicationKernel($applicationKernel);
-            $this->systemKernel->init();
         }
 
-        // Subrequest
-        if ($controller instanceof ControllerInterface) {
-            $controller->init();
-
-            return true;
-        }
-
+        return true;
     }
 
     /**

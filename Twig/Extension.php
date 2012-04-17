@@ -2,7 +2,8 @@
 
 namespace Prototypr\SystemBundle\Twig;
 
-use Symfony\Component\HttpFoundation\Request;
+use Prototypr\SystemBundle\Exception\SystemNotInitializedException;
+use Prototypr\SystemBundle\Core\SystemKernel;
 
 /**
  * Prototypr core twig extensions
@@ -10,24 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 class Extension extends \Twig_Extension
 {
     /**
-     * @var Request
+     * @var SystemKernel
      */
-    protected $request;
+    protected $systemKernel;
 
     /**
      * @var \Twig_Environment
      */
     protected $environment;
-
-    /**
-     * __construct
-     *
-     * @param Request $request
-     */
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
 
     /**
      * Init Runtime
@@ -37,6 +28,16 @@ class Extension extends \Twig_Extension
     public function initRuntime(\Twig_Environment $environment)
     {
         $this->environment = $environment;
+    }
+
+    /**
+     * Construct
+     *
+     * @param SystemKernel $systemKernel
+     */
+    public function __construct($systemKernel)
+    {
+        $this->systemKernel = $systemKernel;
     }
 
     /**
@@ -58,13 +59,18 @@ class Extension extends \Twig_Extension
      * Get current controller name
      *
      * @return string
+     * @throws SystemNotInitializedException
      */
     public function getControllerName()
     {
         $pattern = "#Controller\\\([a-zA-Z]*)Controller#";
         $matches = array();
 
-        if (preg_match($pattern, $this->request->get('_controller'), $matches)) {
+        if (false == $this->systemKernel->getMasterRequest()) {
+            throw new SystemNotInitializedException();
+        }
+
+        if (preg_match($pattern, $this->systemKernel->getMasterRequest()->get('_controller'), $matches)) {
             return strtolower($matches[1]);
         }
     }
@@ -73,13 +79,18 @@ class Extension extends \Twig_Extension
      * Get current action name
      *
      * @return string
+     * @throws SystemNotInitializedException
      */
     public function getActionName()
     {
         $pattern = "#::([a-zA-Z]*)Action#";
         $matches = array();
 
-        if (preg_match($pattern, $this->request->get('_controller'), $matches)) {
+        if (false == $this->systemKernel->getMasterRequest()) {
+            throw new SystemNotInitializedException();
+        }
+
+        if (preg_match($pattern, $this->systemKernel->getMasterRequest()->get('_controller'), $matches)) {
             return strtolower($matches[1]);
         }
     }
@@ -93,4 +104,5 @@ class Extension extends \Twig_Extension
     {
         return 'prototypr_system';
     }
+
 }
