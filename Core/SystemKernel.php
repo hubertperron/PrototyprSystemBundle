@@ -57,10 +57,6 @@ class SystemKernel
             throw new ApplicationNotBoundException();
         }
 
-        if (false == in_array($this->applicationKernel->getName(), array_keys($this->applicationKernels))) {
-            throw new ApplicationNotFoundException();
-        }
-
         $this->applicationKernel->init();
 
         $this->logger->addInfo('Prototypr initialized using application kernel ' . $this->applicationKernel);

@@ -48,10 +48,10 @@ class Extension extends \Twig_Extension
     public function getGlobals()
     {
         return array(
-            'controller_name' => $this->getControllerName(),
-            'action_name' => $this->getActionName(),
-            'bundle_name' => 'BUNDLE_NAME_TODO',
-            'element' => 'CURRENT_ELEMENT_TODO',
+//            'controller_name' => $this->getControllerName(),
+//            'action_name' => $this->getActionName(),
+//            'bundle_name' => 'BUNDLE_NAME_TODO',
+//            'element' => 'CURRENT_ELEMENT_TODO',
         );
     }
 

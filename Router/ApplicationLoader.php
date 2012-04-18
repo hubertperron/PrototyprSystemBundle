@@ -14,6 +14,9 @@ use JMS\I18nRoutingBundle\Router\I18nLoader;
 use Prototypr\SystemBundle\Exception\RouterLoaderException;
 use Prototypr\SystemBundle\Entity\Application;
 
+/**
+ *
+ */
 class ApplicationLoader
 {
     /**
@@ -122,8 +125,8 @@ class ApplicationLoader
                     if ($pageBundle->getMaster()) {
                         $collection->add($name, $route);
                     } else {
+                        $collection->remove($name);
                     }
-                    $collection->remove($name);
 
                     if ($route->getOption('pageDefault') && $pageBundle->getMaster()) {
                         $collection->add($route->getDefault('_locale') . I18nLoader::ROUTING_PREFIX . $page->getApplication()->getName() . '_page_' . $page->getId(), $route);
@@ -151,7 +154,7 @@ class ApplicationLoader
         $routeName = preg_replace('/(.*)' . preg_quote(I18nLoader::ROUTING_PREFIX) . '/', '', $routeName);
         $routeName = str_replace('_', '', $routeName);
 
-        if (preg_match('/^' . $bundleClass . '/', $routeName)) {
+        if (preg_match('/^' . $bundleClass . $this->applicationName . '/', $routeName)) {
             return true;
         }
     }

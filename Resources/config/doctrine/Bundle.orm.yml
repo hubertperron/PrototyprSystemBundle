@@ -10,11 +10,3 @@ Prototypr\SystemBundle\Entity\Bundle:
     pageBundles:
       targetEntity: Prototypr\SystemBundle\Entity\PageBundle
       mappedBy: bundle
-  manyToOne:
-    application:
-      targetEntity: Prototypr\SystemBundle\Entity\Application
-      inversedBy: bundles
-      joinColumn:
-        name: application_id
-        referencedColumnName: id
-        onDelete: cascade

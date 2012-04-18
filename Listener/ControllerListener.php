@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Prototypr\SystemBundle\Core\SystemKernel;
 use Prototypr\SystemBundle\Core\ApplicationKernel;
 use Prototypr\SystemBundle\Controller\ControllerInterface;
+use Prototypr\SystemBundle\Exception\ApplicationNotFoundException;
 
 /**
  * Controller Listener
@@ -45,6 +46,7 @@ class ControllerListener
 
     /**
      * @param FilterControllerEvent $event
+     * @throws ApplicationNotFoundException
      */
     public function onKernelController(FilterControllerEvent $event)
     {
@@ -56,6 +58,10 @@ class ControllerListener
             if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
 
                 $applicationName = $event->getRequest()->get('_prototypr_application');
+
+                if (false == $this->container->has('prototypr.' . $applicationName . '.kernel')) {
+                    throw new ApplicationNotFoundException($applicationName . ' application does not exist');
+                }
 
                 $applicationKernel = $this->container->get('prototypr.' . $applicationName . '.kernel');
                 $applicationKernel->setName($applicationName);
@@ -81,7 +87,7 @@ class ControllerListener
      *
      * @return bool
      */
-    protected function isPrototyprEnabled($requestType, Request $request, Controller $controller)
+    protected function isPrototyprEnabled($requestType, Request $request, $controller)
     {
         // The controller must implement the prototypr controller interface
         if (false == $controller instanceof ControllerInterface) {

@@ -27,6 +27,11 @@ class PageBundle extends Base
     protected $master;
 
     /**
+     * @var Application
+     */
+    private $application;
+
+    /**
      * Set page
      *
      * @param Page $page
@@ -84,5 +89,25 @@ class PageBundle extends Base
     public function getMaster()
     {
         return $this->master;
+    }
+
+    /**
+     * Set application
+     *
+     * @param Application $application
+     */
+    public function setApplication(Application $application)
+    {
+        $this->application = $application;
+    }
+
+    /**
+     * Get application
+     *
+     * @return Application
+     */
+    public function getApplication()
+    {
+        return $this->application;
     }
 }

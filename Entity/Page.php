@@ -155,7 +155,7 @@ class Page extends Node
     }
 
     /**
-     * Get every bundle entities connected to this page for a given application
+     * Get every page-bundle entities connected to this page for a given application
      *
      * @param $applicationName
      * @return array
@@ -165,7 +165,7 @@ class Page extends Node
         $pageBundles = array();
 
         foreach ($this->pageBundles as $pageBundle) {
-            if ($pageBundle->getBundle()->getApplication()->getName() == $applicationName) {
+            if ($pageBundle->getApplication()->getName() == $applicationName) {
                 $pageBundles[] = $pageBundle;
             }
         }

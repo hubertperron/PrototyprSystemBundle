@@ -18,16 +18,14 @@ class Bundle extends Base
     protected $class;
 
     /**
-     * @var Prototypr\SystemBundle\Entity\Application
-     */
-    protected $application;
-
-    /**
-     * @var Prototypr\SystemBundle\Entity\PageBundle
+     * @var PageBundle
      */
     protected $pageBundles;
 
 
+    /**
+     * Construct
+     */
     public function __construct()
     {
         $this->pageBundles = new \Doctrine\Common\Collections\ArrayCollection();
@@ -54,31 +52,11 @@ class Bundle extends Base
     }
 
     /**
-     * Set application
-     *
-     * @param Prototypr\SystemBundle\Entity\Application $application
-     */
-    public function setApplication(\Prototypr\SystemBundle\Entity\Application $application)
-    {
-        $this->application = $application;
-    }
-
-    /**
-     * Get application
-     *
-     * @return Prototypr\SystemBundle\Entity\Application 
-     */
-    public function getApplication()
-    {
-        return $this->application;
-    }
-
-    /**
      * Add pageBundles
      *
-     * @param Prototypr\SystemBundle\Entity\PageBundle $pageBundles
+     * @param PageBundle $pageBundles
      */
-    public function addPageBundle(\Prototypr\SystemBundle\Entity\PageBundle $pageBundles)
+    public function addPageBundle(PageBundle $pageBundles)
     {
         $this->pageBundles[] = $pageBundles;
     }
