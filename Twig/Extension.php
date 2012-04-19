@@ -102,6 +102,9 @@ class Extension extends \Twig_Extension
     /**
      * Get the current bundle name
      *
+     * input:   Prototypr\NewsBundle\Controller\Frontend\NewsController::indexAction
+     * output:  news
+     *
      * @return string
      * @throws SystemNotInitializedException
      */
