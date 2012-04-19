@@ -50,35 +50,13 @@ class Extension extends \Twig_Extension
     public function getGlobals()
     {
         return array(
-            'controller_name' => $this->getControllerName(),
-            'application_name' => $this->getApplicationName(),
             'action_name' => $this->getActionName(),
+            'application_name' => $this->getApplicationName(),
+            'controller_name' => $this->getControllerName(),
+            'bundle_name' => $this->getBundleName(),
 //            'node' => 'CURRENT_node_TODO',
 //            'page' => 'CURRENT_page_TODO',
         );
-    }
-
-    /**
-     * Get current controller name in a shortcut format
-     *
-     * input:   Prototypr\NewsBundle\Controller\Frontend\NewsController::indexAction
-     * output:  frontend_news
-     *
-     * @return string
-     * @throws SystemNotInitializedException
-     */
-    public function getControllerName()
-    {
-        $pattern = '#Controller\\\([a-zA-Z\\\]*)Controller#';
-        $matches = array();
-
-        if (false == $this->systemKernel->getMasterRequest()) {
-            throw new SystemNotInitializedException();
-        }
-
-        if (preg_match($pattern, $this->systemKernel->getMasterRequest()->get('_controller'), $matches)) {
-            return str_replace('\\', '_', strtolower($matches[1]));
-        }
     }
 
     /**
@@ -92,12 +70,12 @@ class Extension extends \Twig_Extension
      */
     public function getActionName()
     {
-        $pattern = "#::([a-zA-Z]*)Action#";
-        $matches = array();
-
         if (false == $this->systemKernel->getMasterRequest()) {
             throw new SystemNotInitializedException();
         }
+
+        $pattern = "#::([a-zA-Z]*)Action#";
+        $matches = array();
 
         if (preg_match($pattern, $this->systemKernel->getMasterRequest()->get('_controller'), $matches)) {
             return strtolower($matches[1]);
@@ -105,7 +83,7 @@ class Extension extends \Twig_Extension
     }
 
     /**
-     * Get the current _capitalized_ application name
+     * Get the current application name
      *
      * @return string
      * @throws SystemNotInitializedException
@@ -117,7 +95,50 @@ class Extension extends \Twig_Extension
         }
 
         if ($application = $this->systemKernel->getMasterRequest()->get('_prototypr_application')) {
-            return ucfirst($application);
+            return $application;
+        }
+    }
+
+    /**
+     * Get the current bundle name
+     *
+     * @return string
+     * @throws SystemNotInitializedException
+     */
+    public function getBundleName()
+    {
+        if (false == $this->systemKernel->getMasterRequest()) {
+            throw new SystemNotInitializedException();
+        }
+
+        $pattern = '#\\\([a-zA-Z]*)Bundle#';
+        $matches = array();
+
+        if (preg_match($pattern, $this->systemKernel->getMasterRequest()->get('_controller'), $matches)) {
+            return strtolower($matches[1]);
+        }
+    }
+
+    /**
+     * Get current controller name in a shortcut format
+     *
+     * input:   Prototypr\NewsBundle\Controller\Frontend\NewsController::indexAction
+     * output:  frontend_news
+     *
+     * @return string
+     * @throws SystemNotInitializedException
+     */
+    public function getControllerName()
+    {
+        if (false == $this->systemKernel->getMasterRequest()) {
+            throw new SystemNotInitializedException();
+        }
+
+        $pattern = '#Controller\\\([a-zA-Z\\\]*)Controller#';
+        $matches = array();
+
+        if (preg_match($pattern, $this->systemKernel->getMasterRequest()->get('_controller'), $matches)) {
+            return str_replace('\\', '_', strtolower($matches[1]));
         }
     }
 
