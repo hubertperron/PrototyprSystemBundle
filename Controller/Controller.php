@@ -8,6 +8,9 @@ use Prototypr\SystemBundle\Controller\ControllerInterface;
 use Prototypr\SystemBundle\Core\SystemKernel;
 use Prototypr\SystemBundle\Core\ApplicationKernel;
 
+/**
+ * Prototypr base controller
+ */
 class Controller extends BaseController implements ControllerInterface
 {
     /**
@@ -16,21 +19,23 @@ class Controller extends BaseController implements ControllerInterface
      */
     public function init()
     {
-        // ... add your implementation in the subclasses
+        // ... add your own implementation in the subclass
     }
 
     /**
-     * @return mixed
+     * Get the currently loaded application kernel
+     *
+     * @return ApplicationKernel
      */
     public function getApplicationKernel()
     {
-        return $this->getSystemKernel()->getCurrentApplicationKernel();
+        return $this->getSystemKernel()->getApplicationKernel();
     }
 
     /**
      * Get the system kernel
      *
-     * @return Kernel
+     * @return SystemKernel
      */
     public function getSystemKernel()
     {
