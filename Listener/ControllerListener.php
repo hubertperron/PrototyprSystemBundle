@@ -59,10 +59,6 @@ class ControllerListener
 
                 $applicationName = $event->getRequest()->get('_prototypr_application');
 
-                if (false == $this->container->has('prototypr.' . $applicationName . '.kernel')) {
-                    throw new ApplicationNotFoundException($applicationName . ' application does not exist');
-                }
-
                 $applicationKernel = $this->container->get('prototypr.' . $applicationName . '.kernel');
                 $applicationKernel->setName($applicationName);
 

@@ -10,16 +10,16 @@ use Prototypr\SystemBundle\Listener\ControllerListener;
 use Prototypr\SystemBundle\Core\SystemKernel;
 use Prototypr\SystemBundle\Core\ApplicationKernel;
 
-
 class ControllerListenerTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         $this->container = $this->getMock('Symfony\Component\DependencyInjection\Container');
-        $this->systemKernel = $this->getMock('Prototypr\SystemBundle\Core\SystemKernel');
-        $this->request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $this->request = $this->getMock('Symfony\Component\HttpFoundation\Request', array(), array(), '', true, false);
         $this->kernel = $this->getMock('Symfony\Component\HttpKernel\Kernel', array(), array('dev', true));
         $this->controller = $this->getMock('Prototypr\SystemBundle\Controller\Controller');
+
+        $this->systemKernel = $this->getMock('Prototypr\SystemBundle\Core\SystemKernel');
         $this->applicationKernel = new ApplicationKernel();
 
         $this->controllerListener = new ControllerListener($this->systemKernel, $this->container);
@@ -35,9 +35,19 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
             HttpKernelInterface::MASTER_REQUEST
         );
 
-        $this->request->expects($this->once())
+        $this->request->expects($this->at(0))
             ->method('get')
-            ->with($this->equalTo('application_name'))
+            ->with($this->equalTo('_prototypr_enabled'))
+            ->will($this->returnValue(true));
+
+        $this->request->expects($this->at(1))
+            ->method('get')
+            ->with($this->equalTo('_prototypr_application'))
+            ->will($this->returnValue('extranet'));
+
+        $this->request->expects($this->at(2))
+            ->method('get')
+            ->with($this->equalTo('_prototypr_application'))
             ->will($this->returnValue('extranet'));
 
         $this->container->expects($this->once())
@@ -45,12 +55,12 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('prototypr.extranet.kernel'))
             ->will($this->returnValue(true));
 
-        $this->container->expects($this->once())
+        $this->container->expects($this->any())
             ->method('get')
             ->with($this->equalTo('prototypr.extranet.kernel'))
             ->will($this->returnValue($this->applicationKernel));
 
-        $this->assertTrue($this->controllerListener->onKernelController($filterControllerEvent));
+        $this->controllerListener->onKernelController($filterControllerEvent);
         $this->assertEquals('extranet', $this->applicationKernel->getName());
 
         // Testing with a subrequest that should do nothing
