@@ -82,4 +82,19 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('seriousnews', $this->extension->getControllerName());
     }
+
+    public function testGetName()
+    {
+        $this->assertEquals('prototypr_system', $this->extension->getName());
+    }
+
+    public function testGetGlobals()
+    {
+        $globals = $this->extension->getGlobals();
+
+        $this->assertArrayHasKey('action_name', $globals);
+        $this->assertArrayHasKey('application_name', $globals);
+        $this->assertArrayHasKey('controller_name', $globals);
+        $this->assertArrayHasKey('bundle_name', $globals);
+    }
 }
