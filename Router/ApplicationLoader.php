@@ -93,7 +93,7 @@ class ApplicationLoader
                         continue;
                     }
 
-                    if (false == $this->routeNameMatchBundleClass($name, $bundle->getClass())) {
+                    if (false == $this->routeNameCompatibleWithBundleClass($name, $bundle->getClass(), $pageBundle->getBundleApplication())) {
                         continue;
                     }
 
@@ -122,15 +122,15 @@ class ApplicationLoader
                      *  3. Generating a specific route for the page-bundle connection (en__RG__page_id_5_frontend_news_bundle_detail)
                      */
 
-                    if ($pageBundle->getMaster()) {
-                        $collection->add($name, $route);
-                    } else {
-                        $collection->remove($name);
-                    }
-
-                    if ($route->getOption('pageDefault') && $pageBundle->getMaster()) {
-                        $collection->add($route->getDefault('_locale') . I18nLoader::ROUTING_PREFIX . $page->getApplication()->getName() . '_page_' . $page->getId(), $route);
-                    }
+//                    if ($pageBundle->getMaster()) {
+//                        $collection->add($name, $route);
+//                    } else {
+//                        $collection->remove($name);
+//                    }
+//
+//                    if ($route->getOption('pageDefault') && $pageBundle->getMaster()) {
+//                        $collection->add($route->getDefault('_locale') . I18nLoader::ROUTING_PREFIX . $page->getApplication()->getName() . '_page_' . $page->getId(), $route);
+//                    }
 
                     $collection->add(preg_replace('/(' . I18nLoader::ROUTING_PREFIX . ')/', '$1' . $page->getApplication()->getName() . '_page_' . $page->getId() . '_' , $name), $route);
                 }
@@ -141,20 +141,25 @@ class ApplicationLoader
     }
 
     /**
-     * routeName: frontend_news_bundle_index
-     * bundleName: PrototyprFrontendNewsBundle
+     * routeName: en__RG__news_bundle_frontend
+     * bundleClass: PrototyprNewsBundle
+     * bundleApplication: NULL
      *
      * @param $routeName
      * @param $bundleClass
+     * @param $bundleApplication
+     *
      * @return bool
      */
-    protected function routeNameMatchBundleClass($routeName, $bundleClass)
+    protected function routeNameCompatibleWithBundleClass($routeName, $bundleClass, $bundleApplication = null)
     {
+        $bundleApplication = $bundleApplication ?: $this->applicationName;
+
         $bundleClass = strtolower(preg_replace('/^Prototypr/', '', $bundleClass));
         $routeName = preg_replace('/(.*)' . preg_quote(I18nLoader::ROUTING_PREFIX) . '/', '', $routeName);
         $routeName = str_replace('_', '', $routeName);
 
-        if (preg_match('/^' . $bundleClass . $this->applicationName . '/', $routeName)) {
+        if (preg_match('/^' . $bundleClass . $bundleApplication . '/', $routeName)) {
             return true;
         }
     }

@@ -12,14 +12,19 @@ use Prototypr\SystemBundle\Entity\Base;
 class PageBundle extends Base
 {
     /**
-     * @var Page
+     * @var Page $page
      */
     protected $page;
 
     /**
-     * @var Bundle
+     * @var Bundle $bundle
      */
     protected $bundle;
+
+    /**
+     * @var string $bundle_application
+     */
+    protected $bundle_application;
 
     /**
      * @var boolean $master
@@ -27,9 +32,10 @@ class PageBundle extends Base
     protected $master;
 
     /**
-     * @var Application
+     * @var Application $application
      */
-    private $application;
+    protected $application;
+
 
     /**
      * Set page
@@ -109,5 +115,25 @@ class PageBundle extends Base
     public function getApplication()
     {
         return $this->application;
+    }
+
+    /**
+     * Set bundle_application
+     *
+     * @param string $bundleApplication
+     */
+    public function setBundleApplication($bundleApplication)
+    {
+        $this->bundle_application = $bundleApplication;
+    }
+
+    /**
+     * Get bundle_application
+     *
+     * @return string 
+     */
+    public function getBundleApplication()
+    {
+        return $this->bundle_application;
     }
 }

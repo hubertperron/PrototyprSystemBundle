@@ -5,6 +5,9 @@ Prototypr\SystemBundle\Entity\PageBundle:
     master:
       type: boolean
       default: false
+    bundle_application: # Used to override the application used in the bundle. Like mapping a frontend bundle to an intranet application.
+      type: string
+      nullable: true
   manyToOne:
     page:
       targetEntity: Prototypr\SystemBundle\Entity\Page

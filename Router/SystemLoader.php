@@ -48,6 +48,25 @@ class SystemLoader extends BaseLoader
             throw new RouterLoaderException('[' . get_class($e) . ']' . "\n" . $e->getMessage());
         }
 
+        $collection = $this->cleanCollection($collection);
+
+        return $collection;
+    }
+
+    /**
+     * Remove the base routes that were used for path merging between the bundles and the pages
+     *
+     * @param RouteCollection $collection
+     * @return RouteCollection
+     */
+    protected function cleanCollection(RouteCollection $collection)
+    {
+        foreach ($collection->all() as $name => $route) {
+            if (false == $route->getDefault('_prototypr_enabled') && $route->getOption('mergeWithPage')) {
+                $collection->remove($name);
+            }
+        }
+
         return $collection;
     }
 
