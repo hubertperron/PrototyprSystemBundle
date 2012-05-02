@@ -3,9 +3,9 @@
 namespace Prototypr\SystemBundle\Tests\Twig;
 
 use Prototypr\SystemBundle\Core\SystemKernel;
-use Prototypr\SystemBundle\Twig\Extension;
+use Prototypr\SystemBundle\Twig\UtilityExtension;
 
-class ExtensionTest extends \PHPUnit_Framework_TestCase
+class UtilityExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SystemKernel
@@ -26,7 +26,7 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('getMasterRequest')
             ->will($this->returnValue($this->request));
 
-        $this->extension = new Extension($this->systemKernel);
+        $this->extension = new UtilityExtension($this->systemKernel);
     }
 
     public function testGetActionName()

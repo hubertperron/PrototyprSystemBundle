@@ -10,7 +10,7 @@ use Prototypr\SystemBundle\Core\SystemKernel;
  *
  * Inspired by: http://www.kamiladryjanek.com/2011/11/symfony2-get-controller-action-name-in-twig-template/
  */
-class Extension extends \Twig_Extension
+class UtilityExtension extends \Twig_Extension
 {
     /**
      * @var SystemKernel
