@@ -5,7 +5,8 @@ parameters:
     prototypr.system.pre_persist_listener.class: Prototypr\SystemBundle\Listener\PrePersistListener
     prototypr.system.router_loader.class: Prototypr\SystemBundle\Router\SystemLoader
     prototypr.system.router_cache.class: Prototypr\SystemBundle\Router\Cache
-    prototypr.system.twig_extension.class: Prototypr\SystemBundle\Twig\Extension
+    prototypr.system.twig_utility_extension.class: Prototypr\SystemBundle\Twig\UtilityExtension
+    prototypr.system.twig_routing_extension.class: Prototypr\SystemBundle\Twig\RoutingExtension
 
 services:
 
@@ -32,9 +33,15 @@ services:
         class: %prototypr.system.router_cache.class%
         arguments: [ @kernel ]
 
-    prototypr.system.twig_extension:
-        class: %prototypr.system.twig_extension.class%
+    prototypr.system.twig_utility_extension:
+        class: %prototypr.system.twig_utility_extension.class%
         arguments: [ @prototypr.system.kernel ]
+        tags:
+            - { name: twig.extension }
+
+    prototypr.system.twig_routing_extension:
+        class: %prototypr.system.twig_routing_extension.class%
+        arguments: [ @router, @service_container ]
         tags:
             - { name: twig.extension }
 
