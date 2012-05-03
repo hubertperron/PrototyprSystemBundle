@@ -20,13 +20,26 @@ class RoutingExtensionTest extends WebTestCase
         $this->extension = new RoutingExtension(null, null);
     }
 
-    public function testGetRouteMapServiceForEntity()
+    public function testGetRouteMapService()
     {
         $entity = new Page();
 
-        $service = $this->extension->getRouteMapServiceForEntity($entity);
+        $service = $this->extension->getRouteMapService($entity);
 
         $this->assertEquals('prototypr_system.route_map.page', $service);
+    }
+
+    public function testGetName()
+    {
+        $this->assertEquals('prototypr_routing', $this->extension->getName());
+    }
+
+    public function testGetFunctions()
+    {
+        $functions = $this->extension->getFunctions();
+
+        $this->assertArrayHasKey('entity_url', $functions);
+        $this->assertArrayHasKey('entity_path', $functions);
     }
 
 }

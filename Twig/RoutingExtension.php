@@ -81,7 +81,7 @@ class RoutingExtension extends \Twig_Extension
      * @param $entity
      * @return string
      */
-    public function getRouteMapServiceForEntity($entity)
+    public function getRouteMapService($entity)
     {
         $entityClass = get_class($entity);
 
