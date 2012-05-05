@@ -71,7 +71,7 @@ class UtilityExtension extends \Twig_Extension
     public function getActionName()
     {
         if (false == $this->systemKernel->getMasterRequest()) {
-            throw new SystemNotInitializedException();
+            return;
         }
 
         $pattern = "#::([a-zA-Z]*)Action#";
@@ -91,7 +91,7 @@ class UtilityExtension extends \Twig_Extension
     public function getApplicationName()
     {
         if (false == $this->systemKernel->getMasterRequest()) {
-            throw new SystemNotInitializedException();
+            return;
         }
 
         if ($application = $this->systemKernel->getMasterRequest()->get('_prototypr_application')) {
@@ -111,7 +111,7 @@ class UtilityExtension extends \Twig_Extension
     public function getBundleName()
     {
         if (false == $this->systemKernel->getMasterRequest()) {
-            throw new SystemNotInitializedException();
+            return;
         }
 
         $pattern = '#\\\([a-zA-Z]*)Bundle#';
@@ -134,7 +134,7 @@ class UtilityExtension extends \Twig_Extension
     public function getControllerName()
     {
         if (false == $this->systemKernel->getMasterRequest()) {
-            throw new SystemNotInitializedException();
+            return;
         }
 
         $pattern = '#Controller\\\([a-zA-Z\\\]*)Controller#';
