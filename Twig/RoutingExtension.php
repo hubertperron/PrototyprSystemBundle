@@ -55,12 +55,13 @@ class RoutingExtension extends \Twig_Extension
      * @param string $targetPage
      * @return string
      */
-    public function getEntityPath($entity, $parameters = array(), $suffix = '', $targetPage = null)
+    public function getEntityPath($entity, $parameters = array(), $suffix = null, $targetPage = null)
     {
-        $entityRouteMap = $this->container->get($this->getRouteMapServiceForEntity($entity));
+        $entityRouteMap = $this->container->get($this->getRouteMapService($entity));
+        $entityRouteMap->setEntity($entity);
 
-        $name = $entityRouteMap->getFrontendRoute($targetPage, $suffix);
-        $parameters = $entityRouteMap->getFrontendParameters($parameters, $targetPage, $suffix);
+        $name = $entityRouteMap->getFrontendRoute($parameters, $suffix, $targetPage);
+        $parameters = $entityRouteMap->getFrontendParameters($parameters, $suffix, $targetPage);
 
         return $this->generator->generate($name, $parameters, false);
     }
