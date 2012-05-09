@@ -99,11 +99,7 @@ class ApplicationLoader
 
                     // Bring back the locale to the beginning of the pattern
                     $locales = implode('|', $this->container->getParameter('jms_i18n_routing.locales'));
-                    if (preg_match('/(\/' . $locales . ')/', $route->getPattern(), $matches)) {
-                        $locale = $matches[1];
-                    } else {
-                        $locale = '';
-                    }
+                    $locale = (preg_match('/(\/' . $locales . ')/', $route->getPattern(), $matches)) ? $matches[1] : '';
 
                     $route = new Route(
                         $locale . $pattern . preg_replace('/^' . preg_quote($locale, '/') . '/', '', $route->getPattern()),
@@ -112,26 +108,7 @@ class ApplicationLoader
                         array_merge($options, $route->getOptions())
                     );
 
-                    /**
-                     * A bundle can be connected to one or more pages and
-                     * a page can have one or more connected bundles.
-                     *
-                     * Route generation strategies:
-                     *  1. Generating a shortcut route to a bundle using the master page-bundle connection (en__RG__frontend_news_bundle_detail)
-                     *  2. Generating a direct route to a page (en__RG__page_id_5 )
-                     *  3. Generating a specific route for the page-bundle connection (en__RG__page_id_5_frontend_news_bundle_detail)
-                     */
-
-//                    if ($pageBundle->getMaster()) {
-//                        $collection->add($name, $route);
-//                    } else {
-//                        $collection->remove($name);
-//                    }
-//
-//                    if ($route->getOption('pageDefault') && $pageBundle->getMaster()) {
-//                        $collection->add($route->getDefault('_locale') . I18nLoader::ROUTING_PREFIX . $page->getApplication()->getName() . '_page_' . $page->getId(), $route);
-//                    }
-
+                    // Generating a specific route for the page-bundle connection (en__RG__page_id_5_frontend_news_bundle_detail)
                     $collection->add(preg_replace('/(' . I18nLoader::ROUTING_PREFIX . ')/', '$1' . $page->getApplication()->getName() . '_page_' . $page->getId() . '_' , $name), $route);
                 }
             }

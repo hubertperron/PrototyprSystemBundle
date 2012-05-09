@@ -54,7 +54,7 @@ class SystemLoader extends BaseLoader
     }
 
     /**
-     * Remove the base routes that were used for path merging between the bundles and the pages
+     * Remove the routes that were used for path merging between the bundles and the pages
      *
      * @param RouteCollection $collection
      * @return RouteCollection
