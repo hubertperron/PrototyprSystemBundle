@@ -102,7 +102,7 @@ class ApplicationLoader
                     $locale = (preg_match('/(\/' . $locales . ')/', $route->getPattern(), $matches)) ? $matches[1] : '';
 
                     $route = new Route(
-                        $locale . $pattern . preg_replace('/^' . preg_quote($locale, '/') . '/', '', $route->getPattern()),
+                        str_replace('//', '/', $locale . $pattern . preg_replace('/^' . preg_quote($locale, '/') . '/', '', $route->getPattern())),
                         array_merge($defaults, $route->getDefaults()),
                         array_merge($requirements, $route->getRequirements()),
                         array_merge($options, $route->getOptions())
