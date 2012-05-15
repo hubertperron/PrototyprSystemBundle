@@ -79,6 +79,9 @@ EOF
             if ($parentSlugs = $route->getRoute()->getDefault('_prototypr_page_parent_slugs_imploded')) {
                 $pattern = preg_replace('/(' . preg_quote($parentSlugs, '/'). ')/', '<fg=blue>$1</>', $pattern);
             }
+            if ($application = $route->getRoute()->getDefault('_prototypr_application_route_prefix')) {
+                $pattern = preg_replace('/(' . preg_quote($application, '/'). ')/', '<fg=red>$1</>', $pattern);
+            }
             $output->writeln(sprintf($format, $name, $method, $pattern));
         }
     }

@@ -74,6 +74,7 @@ class ApplicationLoader
                 '_prototypr_page_parent_slugs' => $page->getParentSlugs(),
                 '_prototypr_page_parent_slugs_imploded' => implode('/', $page->getParentSlugs()),
                 '_prototypr_page_level' => $page->getLevel(),
+                '_prototypr_application_route_prefix' => $application->getRoutingPrefix()
             ));
 
             $requirements = $this->getRouteRequirements();
