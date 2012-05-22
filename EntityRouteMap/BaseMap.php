@@ -3,6 +3,7 @@
 namespace Prototypr\SystemBundle\EntityRouteMap;
 
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Routing\RouteCollection;
 
 use Prototypr\SystemBundle\Core\SystemKernel;
 use Prototypr\SystemBundle\Entity\Page;
@@ -66,6 +67,22 @@ abstract class BaseMap
     }
 
     /**
+     * @return string
+     */
+    public function getCurrentApplicationName()
+    {
+        return $this->systemKernel->getApplicationKernel()->getName();
+    }
+
+    /**
+     * @return RouteCollection
+     */
+    public function getRouteCollection()
+    {
+        return $this->router->getRouteCollection()->all();
+    }
+
+    /**
      * @param Base $entity
      */
     public function setEntity($entity)
@@ -113,4 +130,5 @@ abstract class BaseMap
     {
         return $this->router;
     }
+
 }
