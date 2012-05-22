@@ -42,8 +42,4 @@ class BundleMap extends BaseMap
         }
     }
 
-    public function getParameters($options)
-    {
-        return $options['parameters'];
-    }
 }

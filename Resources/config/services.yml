@@ -8,6 +8,7 @@ parameters:
     prototypr.system.twig_utility_extension.class: Prototypr\SystemBundle\Twig\UtilityExtension
     prototypr.system.twig_routing_extension.class: Prototypr\SystemBundle\Twig\RoutingExtension
     prototypr.system.route_map.bundle.class: Prototypr\SystemBundle\EntityRouteMap\BundleMap
+    prototypr.system.route_map.page_bundle.class: Prototypr\SystemBundle\EntityRouteMap\PageBundleMap
 
 services:
 
@@ -48,6 +49,12 @@ services:
 
     prototypr_system.route_map.bundle:
         class: %prototypr.system.route_map.bundle.class%
+        calls:
+          - [ setSystemKernel, [ @prototypr.system.kernel ] ]
+          - [ setRouter, [ @router ] ]
+
+    prototypr_system.route_map.page_bundle:
+        class: %prototypr.system.route_map.page_bundle.class%
         calls:
           - [ setSystemKernel, [ @prototypr.system.kernel ] ]
           - [ setRouter, [ @router ] ]

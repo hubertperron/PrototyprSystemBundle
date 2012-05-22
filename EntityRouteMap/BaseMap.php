@@ -66,6 +66,15 @@ abstract class BaseMap
         return $route;
     }
 
+    public function getParameters($options)
+    {
+        if (isset($options['parameters'])) {
+            return $options['parameters'];
+        }
+
+        return array();
+    }
+
     /**
      * @return string
      */
