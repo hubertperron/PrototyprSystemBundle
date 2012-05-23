@@ -76,6 +76,7 @@ class PageBundleMapTest extends \PHPUnit_Framework_TestCase
         $pageBundle = new PageBundle();
         $pageBundle->setPage($page);
         $pageBundle->setBundle($bundle);
+        $pageBundle->setApplication($frontendApplication);
 
         $this->pageBundleMap->setEntity($pageBundle);
         $this->assertEquals('en__RG__frontend_page_6_product_bundle_frontend', $this->pageBundleMap->getRoute($options));

@@ -43,6 +43,7 @@ class RoutingExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
+            'entity_route' => new \Twig_Function_Method($this, 'getEntityRoute'),
             'entity_url' => new \Twig_Function_Method($this, 'getEntityUrl'),
             'entity_path' => new \Twig_Function_Method($this, 'getEntityPath')
         );
@@ -50,30 +51,47 @@ class RoutingExtension extends \Twig_Extension
 
     /**
      * @param $entity
-     * @param array $parameters
-     * @param string $suffix
-     * @param string $targetPage
-     * @return string
+     * @param array $options
+     * @return array
      */
-    public function getEntityPath($entity, $parameters = array(), $suffix = null, $targetPage = null)
+    public function getEntityRoute($entity, $options = array())
     {
         $entityRouteMap = $this->container->get($this->getRouteMapService($entity));
         $entityRouteMap->setEntity($entity);
 
-        $name = $entityRouteMap->getFrontendRoute($parameters, $suffix, $targetPage);
-        $parameters = $entityRouteMap->getFrontendParameters($parameters, $suffix, $targetPage);
+        $options = array_merge($this->getDefaultOptions(), $options);
 
-        return $this->generator->generate($name, $parameters, false);
+        $name = $entityRouteMap->getRoute($options);
+        $parameters = $entityRouteMap->getParameters($options);
+
+        return array(
+            'name' => $name,
+            'parameters' => $parameters
+        );
     }
 
     /**
-     * @param $name
-     * @param array $parameters
+     * @param $entity
+     * @param array $options
      * @return string
      */
-    public function getUrl($name, $parameters = array())
+    public function getEntityPath($entity, $options = array())
     {
-        return $this->generator->generate($name, $parameters, true);
+        $route = $this->getEntityRoute($entity, $options);
+
+        return $this->generator->generate($route['name'], $route['parameters'], false);
+    }
+
+    /**
+     * @param $entity
+     * @param array $options
+     * @return string
+     */
+    public function getEntityUrl($entity, $options = array())
+    {
+        $route = $this->getEntityRoute($entity, $options);
+
+        return $this->generator->generate($route['name'], $route['parameters'], true);
     }
 
     /**
@@ -90,6 +108,17 @@ class RoutingExtension extends \Twig_Extension
         if (preg_match('/.*\\\(.*)Bundle\\\Entity\\\(.*)/', $entityClass, $matches)) {
             return 'prototypr_' . strtolower($matches[1]) . '.route_map.' . strtolower($matches[2]);
         }
+    }
+
+    protected function getDefaultOptions()
+    {
+        return array(
+            'page' => null,
+            'page_application' => null,
+            'application' => null,
+            'parameters' => null,
+            'suffix' => null
+        );
     }
 
     /**

@@ -28,7 +28,7 @@ class PageBundleMap extends BaseMap
 
         $pageApplication = $this->entity->getPage()->getApplication()->getName();
         $pageId = $this->entity->getPage()->getId();
-        $application = $this->entity->getBundleApplication() ?: $pageApplication;
+        $application =  $this->entity->getBundleApplication() ?: $this->entity->getApplication()->getName();
 
         foreach ($this->getRouteCollection() as $name => $route) {
             if (preg_match('/.+' . $pageApplication . '_page_' . $pageId . '_' . $bundleRoutingName . '_' . $application . '.*/', $name)) {
