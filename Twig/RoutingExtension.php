@@ -87,7 +87,7 @@ class RoutingExtension extends \Twig_Extension
      * @param array $options
      * @return string
      */
-    public function getEntityUrl($entity, $options = array())
+    public function getUrl($entity, $options = array())
     {
         $route = $this->getEntityRoute($entity, $options);
 
@@ -116,7 +116,7 @@ class RoutingExtension extends \Twig_Extension
             'page' => null,
             'page_application' => null,
             'application' => null,
-            'parameters' => null,
+            'parameters' => array(),
             'suffix' => null
         );
     }
