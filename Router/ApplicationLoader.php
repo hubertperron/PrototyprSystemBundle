@@ -83,6 +83,9 @@ class ApplicationLoader
             // Merging the associated bundle entities
             foreach ($page->getPageBundlesForApplication($this->applicationName) as $pageBundle) {
 
+                $defaults['_prototypr_page_bundle_id'] = $pageBundle->getId();
+                $defaults['_prototypr_bundle_id'] = $pageBundle->getBundle()->getId();
+
                 $bundle = $pageBundle->getBundle();
 
                 $this->kernel->getBundle($bundle->getClass()); // Validating that the bundle is correctly registered
