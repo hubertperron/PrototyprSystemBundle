@@ -26,6 +26,11 @@ class Application extends Base
      */
     private $routingPrefix;
 
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     /**
      * Construct
      */

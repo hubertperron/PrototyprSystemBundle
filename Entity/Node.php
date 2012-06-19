@@ -32,6 +32,10 @@ abstract class Node extends Base
      */
     protected $name;
 
+    public function __toString()
+    {
+        return $this->name;
+    }
 
     /**
      * Set headers

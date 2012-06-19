@@ -12,4 +12,18 @@ use Prototypr\SystemBundle\Core\BaseEntityRepository;
  */
 class PageRepository extends BaseEntityRepository
 {
+
+    public function findByApplicationNameForNavigation($applicationName)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('p', 'a', 'pc', 'pb', 'b')
+            ->innerJoin('p.application', 'a')
+            ->leftJoin('p.children', 'pc')
+            ->leftJoin('p.pageBundles', 'pb')
+            ->leftJoin('pb.bundle', 'b')
+            ->where('a.name = :name')
+            ->setParameter('name', $applicationName);
+
+        return $query->getQuery()->getResult();
+    }
 }

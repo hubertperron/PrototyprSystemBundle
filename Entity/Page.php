@@ -31,6 +31,11 @@ class Page extends Node
      */
     protected $pageBundles;
 
+    /**
+     * @var int
+     */
+    protected $level;
+
 
     public function __construct()
     {
@@ -55,6 +60,11 @@ class Page extends Node
     public function getChildren()
     {
         return $this->children;
+    }
+
+    public function hasChildren()
+    {
+        return count($this->children) > 0;
     }
 
     /**
@@ -132,7 +142,13 @@ class Page extends Node
      */
     public function getLevel()
     {
-        return count($this->getParents()) + 1;
+        if ($this->level) {
+            return $this->level;
+        }
+
+        $this->level = count($this->getParents()) + 1;
+
+        return $this->level;
     }
 
     /**

@@ -54,8 +54,8 @@ class UtilityExtension extends \Twig_Extension
             'application_name' => $this->getApplicationName(),
             'controller_name' => $this->getControllerName(),
             'bundle_name' => $this->getBundleName(),
-//            'node' => 'CURRENT_node_TODO',
-//            'page' => 'CURRENT_page_TODO',
+            'system_kernel' => $this->getSystemKernel(),
+            'application_kernel' => $this->getApplicationKernel()
         );
     }
 
@@ -66,7 +66,6 @@ class UtilityExtension extends \Twig_Extension
      * output:  index
      *
      * @return string
-     * @throws SystemNotInitializedException
      */
     public function getActionName()
     {
@@ -86,7 +85,6 @@ class UtilityExtension extends \Twig_Extension
      * Get the current application name
      *
      * @return string
-     * @throws SystemNotInitializedException
      */
     public function getApplicationName()
     {
@@ -106,7 +104,6 @@ class UtilityExtension extends \Twig_Extension
      * output:  news
      *
      * @return string
-     * @throws SystemNotInitializedException
      */
     public function getBundleName()
     {
@@ -143,6 +140,26 @@ class UtilityExtension extends \Twig_Extension
         if (preg_match($pattern, $this->systemKernel->getMasterRequest()->get('_controller'), $matches)) {
             return str_replace('\\', '_', strtolower($matches[1]));
         }
+    }
+
+    /**
+     * Get the system kernel
+     *
+     * @return SystemKernel
+     */
+    public function getSystemKernel()
+    {
+        return $this->systemKernel;
+    }
+
+    /**
+     * Get the currently loaded application kernel
+     *
+     * @return ApplicationKernel
+     */
+    public function getApplicationKernel()
+    {
+       return $this->getSystemKernel()->getApplicationKernel();
     }
 
     /**
