@@ -40,7 +40,7 @@ class RouterDebugCommand extends BaseRouterDebugCommand
             ->setHelp(<<<EOF
 The <info>router:debug</info> displays the configured routes:
 
-  <info>router:debug</info>
+<info>router:debug</info>
 EOF
         )
         ;
