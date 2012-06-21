@@ -28,7 +28,7 @@ class Cache
         $finder = new Finder();
         $cacheDir = $this->kernel->getCacheDir();
 
-        foreach ($finder->files()->name('/(.*)Url(Matcher|Generator)(.*)/')->in($cacheDir) as $file) {
+        foreach ($finder->files()->name('/app' . $this->kernel->getEnvironment() . 'Url(Matcher|Generator)(.*)/i')->in($cacheDir) as $file) {
             unlink($file);
         }
     }
