@@ -1,62 +1,62 @@
 parameters:
 
-    prototypr.system.kernel.class: Prototypr\SystemBundle\Core\SystemKernel
-    prototypr.system.controller_listener.class: Prototypr\SystemBundle\Listener\ControllerListener
-    prototypr.system.pre_persist_listener.class: Prototypr\SystemBundle\Listener\PrePersistListener
-    prototypr.system.router_loader.class: Prototypr\SystemBundle\Router\SystemLoader
-    prototypr.system.router_cache.class: Prototypr\SystemBundle\Router\Cache
-    prototypr.system.twig_utility_extension.class: Prototypr\SystemBundle\Twig\UtilityExtension
-    prototypr.system.twig_routing_extension.class: Prototypr\SystemBundle\Twig\RoutingExtension
-    prototypr.system.route_map.bundle.class: Prototypr\SystemBundle\EntityRouteMap\BundleMap
-    prototypr.system.route_map.page_bundle.class: Prototypr\SystemBundle\EntityRouteMap\PageBundleMap
+    prototypr_system.kernel.class: Prototypr\SystemBundle\Core\SystemKernel
+    prototypr_system.controller_listener.class: Prototypr\SystemBundle\Listener\ControllerListener
+    prototypr_system.pre_persist_listener.class: Prototypr\SystemBundle\Listener\PrePersistListener
+    prototypr_system.router_loader.class: Prototypr\SystemBundle\Router\SystemLoader
+    prototypr_system.router_cache.class: Prototypr\SystemBundle\Router\Cache
+    prototypr_system.twig_utility_extension.class: Prototypr\SystemBundle\Twig\UtilityExtension
+    prototypr_system.twig_routing_extension.class: Prototypr\SystemBundle\Twig\RoutingExtension
+    prototypr_system.route_map.bundle.class: Prototypr\SystemBundle\EntityRouteMap\BundleMap
+    prototypr_system.route_map.page_bundle.class: Prototypr\SystemBundle\EntityRouteMap\PageBundleMap
 
 services:
 
-    prototypr.system.kernel:
-        class: %prototypr.system.kernel.class%
+    prototypr_system.kernel:
+        class: %prototypr_system.kernel.class%
         shared: true
         calls:
           - [ setLogger, [ @logger ] ]
 
-    prototypr.system.controller_listener:
-        class: %prototypr.system.controller_listener.class%
+    prototypr_system.controller_listener:
+        class: %prototypr_system.controller_listener.class%
         tags:
           - { name: kernel.event_listener, event: kernel.controller }
-        arguments: [ @prototypr.system.kernel, @service_container ]
+        arguments: [ @prototypr_system.kernel, @service_container ]
         calls:
           - [ setLogger, [ @logger ] ]
 
-    prototypr.system.pre_persist_listener:
-        class: %prototypr.system.pre_persist_listener.class%
+    prototypr_system.pre_persist_listener:
+        class: %prototypr_system.pre_persist_listener.class%
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
-    prototypr.system.router_cache:
-        class: %prototypr.system.router_cache.class%
+    prototypr_system.router_cache:
+        class: %prototypr_system.router_cache.class%
         arguments: [ @kernel ]
 
-    prototypr.system.twig_utility_extension:
-        class: %prototypr.system.twig_utility_extension.class%
-        arguments: [ @prototypr.system.kernel ]
+    prototypr_system.twig_utility_extension:
+        class: %prototypr_system.twig_utility_extension.class%
+        arguments: [ @prototypr_system.kernel ]
         tags:
             - { name: twig.extension }
 
-    prototypr.system.twig_routing_extension:
-        class: %prototypr.system.twig_routing_extension.class%
+    prototypr_system.twig_routing_extension:
+        class: %prototypr_system.twig_routing_extension.class%
         arguments: [ @router, @service_container ]
         tags:
             - { name: twig.extension }
 
     prototypr_system.route_map.bundle:
-        class: %prototypr.system.route_map.bundle.class%
+        class: %prototypr_system.route_map.bundle.class%
         calls:
-          - [ setSystemKernel, [ @prototypr.system.kernel ] ]
+          - [ setSystemKernel, [ @prototypr_system.kernel ] ]
           - [ setRouter, [ @router ] ]
 
     prototypr_system.route_map.page_bundle:
-        class: %prototypr.system.route_map.page_bundle.class%
+        class: %prototypr_system.route_map.page_bundle.class%
         calls:
-          - [ setSystemKernel, [ @prototypr.system.kernel ] ]
+          - [ setSystemKernel, [ @prototypr_system.kernel ] ]
           - [ setRouter, [ @router ] ]
 
 

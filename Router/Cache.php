@@ -12,6 +12,9 @@ class Cache
      */
     protected $kernel;
 
+    /**
+     * @param Kernel $kernel
+     */
     public function __construct($kernel)
     {
         $this->kernel = $kernel;

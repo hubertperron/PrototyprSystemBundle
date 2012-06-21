@@ -73,7 +73,7 @@ class EntityManager extends BaseEntityManager
         $repository = parent::getRepository($entityName);
 
         if ($repository instanceof BaseEntityRepository) {
-            $repository->setSystemKernel($this->container->get('prototypr.system.kernel'));
+            $repository->setSystemKernel($this->container->get('prototypr_system.kernel'));
         }
 
         return $repository;

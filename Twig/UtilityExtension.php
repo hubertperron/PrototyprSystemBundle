@@ -4,6 +4,7 @@ namespace Prototypr\SystemBundle\Twig;
 
 use Prototypr\SystemBundle\Exception\SystemNotInitializedException;
 use Prototypr\SystemBundle\Core\SystemKernel;
+use Prototypr\SystemBundle\Core\ApplicationKernel;
 
 /**
  * Prototypr core twig extensions

@@ -39,6 +39,6 @@ class Controller extends BaseController implements ControllerInterface
      */
     public function getSystemKernel()
     {
-        return $this->container->get('prototypr.system.kernel');
+        return $this->container->get('prototypr_system.kernel');
     }
 }
