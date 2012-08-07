@@ -11,14 +11,12 @@
             "email": "hubert.perron@gmail.com"
         }
     ],
-
+    "minimum-stability": "dev",
     "require": {
         "symfony/symfony": "2.1.x"
     },
-
     "autoload": {
         "psr-0": { "Prototypr\\SystemBundle": "" }
     },
-
     "target-dir": "Prototypr/SystemBundle"
 }
