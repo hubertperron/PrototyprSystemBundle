@@ -2,11 +2,9 @@
 
 namespace Prototypr\SystemBundle\Router;
 
-use Exception;
-
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
-use Symfony\Bundle\DoctrineBundle\Registry;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\DependencyInjection\Container;
 
 use Prototypr\SystemBundle\Exception\RouterLoaderException;
@@ -44,7 +42,7 @@ class SystemLoader extends BaseLoader
             foreach ($this->applicationLoaders as $loader) {
                 $this->container->get($loader)->load($collection);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new RouterLoaderException('[' . get_class($e) . ']' . "\n" . $e->getMessage());
         }
 

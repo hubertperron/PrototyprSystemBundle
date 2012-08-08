@@ -1,4 +1,4 @@
-<?php //abc
+<?php
 
 namespace Prototypr\SystemBundle\Router;
 
