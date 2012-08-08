@@ -13,7 +13,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "symfony/symfony": "2.1.x"
+        "symfony/symfony": "2.1.*",
+        "monolog/monolog": "2.1.*"
     },
     "autoload": {
         "psr-0": { "Prototypr\\SystemBundle": "" }
