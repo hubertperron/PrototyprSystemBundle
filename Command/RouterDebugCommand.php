@@ -32,22 +32,29 @@ class RouterDebugCommand extends BaseRouterDebugCommand
     protected function configure()
     {
         $this
-            ->setDefinition(array(
-            new InputArgument('name', InputArgument::OPTIONAL, 'A route name'),
-        ))
             ->setName('prototypr:router:debug')
+            ->setDefinition(array(
+                new InputArgument('name', InputArgument::OPTIONAL, 'A route name'),
+            ))
             ->setDescription('Displays current routes for an application')
             ->setHelp(<<<EOF
-The <info>router:debug</info> displays the configured routes:
+The <info>%command.name%</info> displays the configured routes:
 
-<info>router:debug</info>
+  <info>php %command.full_name%</info>
 EOF
-        )
+            )
         ;
     }
 
-    protected function outputRoutes(OutputInterface $output, $routes)
+    protected function outputRoutes(OutputInterface $output, $routes = null)
     {
+        if (null === $routes) {
+            $routes = array();
+            foreach ($this->getContainer()->get('router')->getRouteCollection()->all() as $name => $route) {
+                $routes[$name] = $route->compile();
+            }
+        }
+
         $output->writeln($this->getHelper('formatter')->formatSection('router', 'Current routes'));
 
         $maxName = 4;
@@ -55,6 +62,7 @@ EOF
         foreach ($routes as $name => $route) {
             $requirements = $route->getRequirements();
             $method = isset($requirements['_method']) ? strtoupper(is_array($requirements['_method']) ? implode(', ', $requirements['_method']) : $requirements['_method']) : 'ANY';
+
             if (strlen($name) > $maxName) {
                 $maxName = strlen($name);
             }
@@ -67,7 +75,6 @@ EOF
 
         // displays the generated routes
         $format1  = '%-'.($maxName + 19).'s %-'.($maxMethod + 19).'s %s';
-
         $output->writeln(sprintf($format1, '<comment>Name</comment>', '<comment>Method</comment>', '<comment>Pattern</comment>'));
         foreach ($routes as $name => $route) {
             $requirements = $route->getRequirements();

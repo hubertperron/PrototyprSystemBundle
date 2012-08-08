@@ -15,6 +15,6 @@ class SetEntityManagerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $container->setParameter('doctrine.orm.entity_manager.class', 'Prototypr\SystemBundle\Core\EntityManager');
-        $container->findDefinition('doctrine.orm.entity_manager')->addMethodCall('setContainer', array(new Reference('service_container')));
+//        $container->findDefinition('doctrine.orm.entity_manager')->addMethodCall('setContainer', array(new Reference('service_container')));
     }
 }
